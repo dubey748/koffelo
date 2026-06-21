@@ -1130,51 +1130,52 @@ const ProductPage: React.FC<TProductDetails> = ({ productDetails }) => {
   return (
     <div className="bg-brand-bg min-h-screen font-sans">
       <Nav showCartIcon />
-      <main className="container mx-auto px-2 sm:px-4 pt-16 sm:pt-20 md:pt-24 py-8 md:py-12 flex flex-col-reverse lg:grid lg:grid-cols-2 gap-8 md:gap-12">
-        <div className="lg:pr-8 flex flex-col">
-          {/* <span className="inline-block self-start bg-brand-offer-btn text-white text-sm font-medium px-4 py-1 rounded-full mb-3">
+      <main className="bg-radial-cream">
+        <section className="container-koffee section-padding grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+          <div className="lg:pr-8 flex flex-col">
+            {/* <span className="inline-block self-start bg-brand-offer-btn text-white text-sm font-medium px-4 py-1 rounded-full mb-3">
  {product.Category?.name || "Coffee"}
  </span> */}
-          <div className="flex flex-row items-center justify-between ">
-            <span className="inline-block self-center sm:self-start bg-brand-offer-btn text-white text-sm font-medium px-4 py-1 rounded-full mb-3">
-              {product.Category?.name || "Coffee"}
-            </span>
-            {isInaugural && (
+            <div className="flex flex-row items-center justify-between ">
               <span className="inline-block self-center sm:self-start bg-brand-offer-btn text-white text-sm font-medium px-4 py-1 rounded-full mb-3">
-                Inaugural Offer
+                {product.Category?.name || "Coffee"}
               </span>
-            )}
-          </div>
+              {isInaugural && (
+                <span className="inline-block self-center sm:self-start bg-brand-offer-btn text-white text-sm font-medium px-4 py-1 rounded-full mb-3">
+                  Inaugural Offer
+                </span>
+              )}
+            </div>
 
-          <h1 className="text-3xl md:text-4xl font-bold text-zinc-900 mb-1 text-center lg:text-left">
-            {product.name}
-          </h1>
+            <h1 className="font-display text-display-lg text-k-espresso mb-2 text-center lg:text-left">
+              {product.name}
+            </h1>
 
-          <p className="text-gray-600 leading-relaxed my-4 text-sm md:text-base text-center lg:text-left">
-            {product.description}
-          </p>
+            <p className="text-k-ink-muted leading-relaxed my-4 text-sm md:text-base max-w-3xl text-center lg:text-left">
+              {product.description}
+            </p>
 
-          <div className="flex flex-wrap gap-x-6 gap-y-3 my-4 justify-center lg:justify-start">
-            {product.productUsp.map((usp) => (
-              <FeatureIcon
-                key={usp.title}
-                iconSrc={usp.icon}
-                text={usp.title}
-              />
-            ))}
-          </div>
-          <ProductOfferCard />
+            <div className="flex flex-wrap gap-x-6 gap-y-3 my-4 justify-center lg:justify-start">
+              {product.productUsp.map((usp) => (
+                <FeatureIcon
+                  key={usp.title}
+                  iconSrc={usp.icon}
+                  text={usp.title}
+                />
+              ))}
+            </div>
+            <ProductOfferCard />
 
-          <div className="flex flex-wrap justify-center lg:justify-start gap-3 mb-6">
-            {variants.map((variant) => {
-              return (
-                <button
-                  key={variant.productId}
-                  onClick={() => {
-                    handleGtmClick(variant);
-                    router.push(`/product/${variant.productId}`);
-                  }}
-                  className={`
+            <div className="flex flex-wrap justify-center lg:justify-start gap-3 mb-6">
+              {variants.map((variant) => {
+                return (
+                  <button
+                    key={variant.productId}
+                    onClick={() => {
+                      handleGtmClick(variant);
+                      router.push(`/product/${variant.productId}`);
+                    }}
+                    className={`
  px-4 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-accent whitespace-nowrap
  ${
    product.productVariant === variant.productVariant
@@ -1182,76 +1183,188 @@ const ProductPage: React.FC<TProductDetails> = ({ productDetails }) => {
      : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
  }
  `}
-                >
-                  {variant.productVariant}
-                </button>
-              );
-            })}
-          </div>
+                  >
+                    {variant.productVariant}
+                  </button>
+                );
+              })}
+            </div>
 
-          <div className="w-full text-white mt-auto">
-            {currentItemInCart ? (
-              <>
-                {/* --- If item is already in cart --- */}
-                <div className="flex p-4 md:p-6 rounded-lg bg-brand-dark flex-col sm:flex-row items-center sm:items-center justify-center gap-4">
-                  {/* Quantity Controls */}
-                  <div className="flex items-center justify-center gap-3 bg-white/10 rounded-lg px-4 py-2">
-                    <button
-                      onClick={() =>
-                        handleUpdateCartQuantity(
-                          currentItemInCart.cartItemId,
-                          currentItemInCart.quantity - 1,
-                        )
-                      }
-                      className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      aria-label="Decrease quantity"
-                      disabled={
-                        updateCartMutation.status === "pending" ||
-                        removeCartMutation.status === "pending"
-                      }
-                    >
-                      <RiSubtractLine className="w-5 h-5" />
-                    </button>
-                    <span className="text-xl font-semibold min-w-[40px] text-center">
-                      {currentItemInCart.quantity}
-                    </span>
-                    <button
-                      onClick={() =>
-                        handleUpdateCartQuantity(
-                          currentItemInCart.cartItemId,
-                          currentItemInCart.quantity + 1,
-                        )
-                      }
-                      className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      aria-label="Increase quantity"
-                      disabled={updateCartMutation.status === "pending"}
-                    >
-                      <RiAddLine className="w-5 h-5" />
-                    </button>
+            <div className="w-full text-white mt-auto">
+              {currentItemInCart ? (
+                <>
+                  {/* --- If item is already in cart --- */}
+                  <div className="flex p-4 md:p-6 rounded-lg bg-brand-dark flex-col sm:flex-row items-center sm:items-center justify-center gap-4">
+                    {/* Quantity Controls */}
+                    <div className="flex items-center justify-center gap-3 bg-white/10 rounded-lg px-4 py-2">
+                      <button
+                        onClick={() =>
+                          handleUpdateCartQuantity(
+                            currentItemInCart.cartItemId,
+                            currentItemInCart.quantity - 1,
+                          )
+                        }
+                        className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Decrease quantity"
+                        disabled={
+                          updateCartMutation.status === "pending" ||
+                          removeCartMutation.status === "pending"
+                        }
+                      >
+                        <RiSubtractLine className="w-5 h-5" />
+                      </button>
+                      <span className="text-xl font-semibold min-w-[40px] text-center">
+                        {currentItemInCart.quantity}
+                      </span>
+                      <button
+                        onClick={() =>
+                          handleUpdateCartQuantity(
+                            currentItemInCart.cartItemId,
+                            currentItemInCart.quantity + 1,
+                          )
+                        }
+                        className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Increase quantity"
+                        disabled={updateCartMutation.status === "pending"}
+                      >
+                        <RiAddLine className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    {/* Price + Remove */}
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+                      {/* --- Container for price & discount --- */}
+                      <div className="flex flex-col items-center sm:items-start">
+                        <span className="text-2xl font-bold">
+                          ₹
+                          {(
+                            parseFloat(
+                              currentItemInCart.price?.toString() || "0",
+                            ) * currentItemInCart.quantity
+                          ).toFixed(2)}
+                        </span>
+
+                        {/* --- Discount Info --- */}
+                        {originalPrice > currentPrice && (
+                          <div className="flex items-baseline space-x-2 mt-1">
+                            <span className="text-xs line-through text-gray-400">
+                              ₹
+                              {(
+                                originalPrice * currentItemInCart.quantity
+                              ).toFixed(2)}
+                            </span>
+                            {product.discountedPercentage !== 0 && (
+                              <span className="text-xs font-bold text-green-400">
+                                ({product.discountedPercentage}% off)
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() =>
+                          handleRemoveFromCart(currentItemInCart.cartItemId)
+                        }
+                        className="text-red-400 hover:text-red-300 font-medium transition-colors disabled:opacity-50"
+                        disabled={removeCartMutation.status === "pending"}
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
+                  {product.marketPlaceLink &&
+                    product.marketPlaceLink.length > 0 && (
+                      <div className="mt-[20px] border border-gray-400 rounded-lg">
+                        <p className="text-sm text-gray-600 mb-3 ml-5 mt-2">
+                          Also available on:
+                        </p>
+                        <div className="flex overflow-x-auto pb-4 px-4">
+                          {product.marketPlaceLink.map((item, i) => (
+                            <a
+                              key={i}
+                              href={item.redirectUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors group flex-shrink-0"
+                            >
+                              <img
+                                src={item.iconUrl}
+                                alt={`${item.platformName} icon`}
+                                className="h-[60px] w-[150px] bg-white p-[10px] object-contain rounded-md"
+                              />
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  {/* Marketplace Links removed per request */}
+                </>
+              ) : (
+                <>
+                  {/* --- If item is NOT in cart --- */}
+                  <div className="flex mb-[10px] bg-brand-dark md:p-6 p-4 rounded-lg flex-col sm:flex-row items-center sm:items-center justify-center gap-4">
+                    {/* Quantity Controls */}
 
-                  {/* Price + Remove */}
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-                    {/* --- Container for price & discount --- */}
-                    <div className="flex flex-col items-center sm:items-start">
+                    {/* Add to Cart Button */}
+                    {product.stockQuantity === 0 ? (
+                      <p className="text-center w-full">
+                        Currently Unavailable
+                      </p>
+                    ) : (
+                      <>
+                        <div className="flex items-center justify-center gap-3 bg-white/10 rounded-lg px-4 py-2 sm:w-auto">
+                          <button
+                            onClick={() =>
+                              setQuantity((q) => Math.max(1, q - 1))
+                            }
+                            className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            aria-label="Decrease quantity"
+                            disabled={quantity <= 1}
+                          >
+                            <RiSubtractLine className="w-5 h-5" />
+                          </button>
+                          <span className="text-xl font-semibold min-w-[40px] text-center">
+                            {quantity}
+                          </span>
+                          <button
+                            onClick={() => setQuantity((q) => q + 1)}
+                            className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+                            aria-label="Increase quantity"
+                          >
+                            <RiAddLine className="w-5 h-5" />
+                          </button>
+                        </div>
+
+                        <button
+                          onClick={() => {
+                            handleAddToCart();
+                          }}
+                          className="btn-pill btn-pill-primary w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
+                          aria-label={`Add ${product.name} - ${product.productVariant} to cart`}
+                          disabled={addToCartMutation.status === "pending"}
+                        >
+                          {addToCartMutation.status === "pending"
+                            ? "Adding..."
+                            : "Add to Cart"}
+                        </button>
+                      </>
+                    )}
+                    {/* Price Display */}
+                    <div className="flex flex-col items-center sm:items-end justify-center w-full sm:w-auto">
                       <span className="text-2xl font-bold">
-                        ₹
-                        {(
-                          parseFloat(
-                            currentItemInCart.price?.toString() || "0",
-                          ) * currentItemInCart.quantity
-                        ).toFixed(2)}
+                        ₹{(currentPrice * quantity).toFixed(2)}
                       </span>
 
-                      {/* --- Discount Info --- */}
                       {originalPrice > currentPrice && (
-                        <div className="flex items-baseline space-x-2 mt-1">
-                          <span className="text-xs line-through text-gray-400">
-                            ₹
-                            {(
-                              originalPrice * currentItemInCart.quantity
-                            ).toFixed(2)}
+                        <div className="flex items-baseline space-x-3 mt-1">
+                          <span className="text-sm font-medium text-gray-200">
+                            MRP
                           </span>
+                          <span className="text-sm line-through decoration-amber-300 decoration-2 leading-none">
+                            ₹{originalPrice.toFixed(2)}
+                          </span>
+                          {/* --- STYLED DISCOUNT TEXT --- */}
                           {product.discountedPercentage !== 0 && (
                             <span className="text-xs font-bold text-green-400">
                               ({product.discountedPercentage}% off)
@@ -1260,153 +1373,46 @@ const ProductPage: React.FC<TProductDetails> = ({ productDetails }) => {
                         </div>
                       )}
                     </div>
-
-                    <button
-                      onClick={() =>
-                        handleRemoveFromCart(currentItemInCart.cartItemId)
-                      }
-                      className="text-red-400 hover:text-red-300 font-medium transition-colors disabled:opacity-50"
-                      disabled={removeCartMutation.status === "pending"}
-                    >
-                      Remove
-                    </button>
                   </div>
-                </div>
-                {product.marketPlaceLink &&
-                  product.marketPlaceLink.length > 0 && (
-                    <div className="mt-[20px] border border-gray-400 rounded-lg">
-                      <p className="text-sm text-gray-600 mb-3 ml-5 mt-2">
-                        Also available on:
-                      </p>
-                      <div className="flex overflow-x-auto pb-4 px-4">
-                        {product.marketPlaceLink.map((item, i) => (
-                          <a
-                            key={i}
-                            href={item.redirectUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors group flex-shrink-0"
-                          >
-                            <img
-                              src={item.iconUrl}
-                              alt={`${item.platformName} icon`}
-                              className="h-[60px] w-[150px] bg-white p-[10px] object-contain rounded-md"
-                            />
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                {/* Marketplace Links removed per request */}
-              </>
-            ) : (
-              <>
-                {/* --- If item is NOT in cart --- */}
-                <div className="flex mb-[10px] bg-brand-dark md:p-6 p-4 rounded-lg flex-col sm:flex-row items-center sm:items-center justify-center gap-4">
-                  {/* Quantity Controls */}
 
-                  {/* Add to Cart Button */}
-                  {product.stockQuantity === 0 ? (
-                    <p className="text-center w-full">Currently Unavailable</p>
-                  ) : (
-                    <>
-                      <div className="flex items-center justify-center gap-3 bg-white/10 rounded-lg px-4 py-2 sm:w-auto">
-                        <button
-                          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                          className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          aria-label="Decrease quantity"
-                          disabled={quantity <= 1}
-                        >
-                          <RiSubtractLine className="w-5 h-5" />
-                        </button>
-                        <span className="text-xl font-semibold min-w-[40px] text-center">
-                          {quantity}
-                        </span>
-                        <button
-                          onClick={() => setQuantity((q) => q + 1)}
-                          className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
-                          aria-label="Increase quantity"
-                        >
-                          <RiAddLine className="w-5 h-5" />
-                        </button>
-                      </div>
-
-                      <button
-                        onClick={() => {
-                          handleAddToCart();
-                        }}
-                        className="w-full sm:flex-1 bg-brand-offer-btn hover:bg-brand-dark text-white py-3 px-6 rounded-lg font-semibold text-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-                        aria-label={`Add ${product.name} - ${product.productVariant} to cart`}
-                        disabled={addToCartMutation.status === "pending"}
-                      >
-                        {addToCartMutation.status === "pending"
-                          ? "Adding..."
-                          : "Add to Cart"}
-                      </button>
-                    </>
-                  )}
-                  {/* Price Display */}
-                  <div className="flex flex-col items-center sm:items-end justify-center w-full sm:w-auto">
-                    <span className="text-2xl font-bold">
-                      ₹{(currentPrice * quantity).toFixed(2)}
-                    </span>
-
-                    {originalPrice > currentPrice && (
-                      <div className="flex items-baseline space-x-3 mt-1">
-                        <span className="text-sm font-medium text-gray-200">
-                          MRP
-                        </span>
-                        <span className="text-sm line-through decoration-amber-300 decoration-2 leading-none">
-                          ₹{originalPrice.toFixed(2)}
-                        </span>
-                        {/* --- STYLED DISCOUNT TEXT --- */}
-                        {product.discountedPercentage !== 0 && (
-                          <span className="text-xs font-bold text-green-400">
-                            ({product.discountedPercentage}% off)
-                          </span>
-                        )}
+                  {/* Marketplace Links removed per request */}
+                  {product.marketPlaceLink &&
+                    product.marketPlaceLink.length > 0 && (
+                      <div className="mt-[20px] border border-gray-400 rounded-lg">
+                        <p className="text-sm text-gray-600 mb-3 ml-5 mt-2">
+                          Also available on:
+                        </p>
+                        <div className="flex overflow-x-auto pb-4 px-4">
+                          {product.marketPlaceLink.map((item, i) => (
+                            <a
+                              key={i}
+                              href={item.redirectUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors group flex-shrink-0"
+                            >
+                              <img
+                                src={item.iconUrl}
+                                alt={`${item.platformName} icon`}
+                                className="h-[60px] w-[150px] bg-white p-[10px] object-contain rounded-md"
+                              />
+                            </a>
+                          ))}
+                        </div>
                       </div>
                     )}
-                  </div>
-                </div>
-
-                {/* Marketplace Links removed per request */}
-                {product.marketPlaceLink &&
-                  product.marketPlaceLink.length > 0 && (
-                    <div className="mt-[20px] border border-gray-400 rounded-lg">
-                      <p className="text-sm text-gray-600 mb-3 ml-5 mt-2">
-                        Also available on:
-                      </p>
-                      <div className="flex overflow-x-auto pb-4 px-4">
-                        {product.marketPlaceLink.map((item, i) => (
-                          <a
-                            key={i}
-                            href={item.redirectUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors group flex-shrink-0"
-                          >
-                            <img
-                              src={item.iconUrl}
-                              alt={`${item.platformName} icon`}
-                              className="h-[60px] w-[150px] bg-white p-[10px] object-contain rounded-md"
-                            />
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className=" p-4 md:p-6 rounded-lg flex items-center justify-center overflow-hidden min-h-[220px] sm:min-h-[300px] md:min-h-[500px]">
-          <ProductImageCarousel
-            images={product.ProductImages}
-            alt={`${product.name} - ${product.productVariant}`}
-          />
-        </div>
+          <div className=" p-4 md:p-6 rounded-lg flex items-center justify-center overflow-hidden min-h-[220px] sm:min-h-[300px] md:min-h-[500px]">
+            <ProductImageCarousel
+              images={product.ProductImages}
+              alt={`${product.name} - ${product.productVariant}`}
+            />
+          </div>
+        </section>
       </main>
       <img src="/assets/liner.png" alt="" className="w-full" />
       <ReviewsSection productId={productDetails.product.productId} />
