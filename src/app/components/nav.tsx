@@ -62,40 +62,37 @@ export default function Nav({
     router.push("/");
   };
 
-  const linkCls = "text-[11px] tracking-[0.3em] uppercase transition-colors duration-300 link-underline";
-
-  // Detect when we're on the dark hero (top of home only)
-  const onDarkHero = pathname === "/" && !scrolled;
-  const navText = onDarkHero ? "text-k-ivory" : "text-k-espresso";
-  const navBg = scrolled
-    ? "bg-k-ivory/95 backdrop-blur-lg shadow-soft"
-    : pathname === "/"
-      ? "bg-transparent"
-      : "bg-k-ivory/90 backdrop-blur-md";
+  const linkCls = "text-[11px] tracking-[0.28em] uppercase transition-colors duration-300 link-underline hover:text-k-copper min-h-[40px] inline-flex items-center";
+  const iconCls = "hover:text-k-copper transition-colors duration-300";
 
   return (
     <>
       <nav
         data-testid="site-nav"
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ease-out-expo ${navBg}`}
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ease-out-expo text-k-espresso ${
+          scrolled
+            ? "bg-k-ivory/95 backdrop-blur-lg shadow-soft border-b border-k-cream-200"
+            : "bg-k-ivory/80 backdrop-blur-md"
+        }`}
       >
-        <div className="container-koffee flex items-center justify-between py-4 md:py-5">
+        <div className="container-koffee flex items-center justify-between py-3 md:py-4">
           <Link
             href="/"
             data-testid="nav-logo"
-            className="flex-shrink-0 transition-transform duration-400 hover:scale-[1.03]"
+            className="flex-shrink-0 transition-transform duration-400 hover:scale-[1.03] min-h-[44px] inline-flex items-center"
           >
-            <div className={`font-display italic text-3xl md:text-4xl tracking-tightest ${navText}`}>
-              Koffelo<span className="text-k-copper-light not-italic">.</span>
+            <div className="font-display italic text-2xl sm:text-3xl md:text-4xl tracking-tightest">
+              Koffelo<span className="text-k-copper not-italic">.</span>
             </div>
           </Link>
 
-          {/* Desktop links */}
-          <div className={`hidden md:flex items-center gap-10 ${navText}`}>
-            <Link href="/" data-testid="nav-home" className={`${linkCls} hover:text-k-copper-light`}>Home</Link>
+          <div className="hidden md:flex items-center gap-8 lg:gap-10">
+            <Link href="/" data-testid="nav-home" className={linkCls}>
+              Home
+            </Link>
             <button
               data-testid="nav-products"
-              className={`${linkCls} hover:text-k-copper-light`}
+              className={linkCls}
               onClick={() => {
                 if (
                   ["/aboutus", "/cart", "/product/[productId]"].some((p) =>
@@ -111,12 +108,12 @@ export default function Nav({
             >
               Collection
             </button>
-            <Link href="/aboutus" data-testid="nav-about" className={`${linkCls} hover:text-k-copper-light`}>
+            <Link href="/aboutus" data-testid="nav-about" className={linkCls}>
               Story
             </Link>
             <button
               data-testid="nav-contact"
-              className={`${linkCls} hover:text-k-copper-light`}
+              className={linkCls}
               onClick={() => {
                 if (
                   ["/aboutus", "/cart", "/product/[productId]"].some((p) =>
@@ -134,18 +131,18 @@ export default function Nav({
             </button>
           </div>
 
-          <div className={`hidden md:flex items-center gap-5 ${navText}`}>
+          <div className="hidden md:flex items-center gap-5">
             {showCartIcon && (
               <Link
                 href="/cart"
                 data-testid="nav-cart"
-                className="relative hover:text-k-copper-light transition-colors duration-300"
+                className={`relative ${iconCls} min-h-[40px] inline-flex items-center`}
               >
                 <FiShoppingCart size={19} strokeWidth={1.6} />
                 {hasCartItems && (
                   <span
                     data-testid="nav-cart-count"
-                    className="absolute -top-2 -right-2 bg-k-copper text-k-ivory text-[9px] rounded-full h-4 w-4 flex items-center justify-center font-semibold"
+                    className="absolute -top-1 -right-2 bg-k-copper text-k-ivory text-[9px] rounded-full h-4 w-4 flex items-center justify-center font-semibold"
                   >
                     {cartData?.cartItems?.length || 0}
                   </span>
@@ -155,30 +152,60 @@ export default function Nav({
             {isLoggedIn ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button data-testid="nav-user-menu" className="hover:text-k-copper-light transition-colors duration-300" type="button">
+                  <button
+                    data-testid="nav-user-menu"
+                    className={`${iconCls} min-h-[40px] inline-flex items-center`}
+                    type="button"
+                  >
                     <FiUser size={19} strokeWidth={1.6} />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-k-paper border-k-cream-200 shadow-medium">
-                  <DropdownMenuItem onClick={() => router.push("/account")} className="text-k-espresso">My Account</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push("/orders")} className="text-k-espresso">My Orders</DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleLogoutClick} className="text-k-espresso">Logout</DropdownMenuItem>
+                <DropdownMenuContent
+                  align="end"
+                  className="bg-k-paper border-k-cream-200 shadow-medium"
+                >
+                  <DropdownMenuItem
+                    onClick={() => router.push("/account")}
+                    className="text-k-espresso"
+                  >
+                    My Account
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => router.push("/orders")}
+                    className="text-k-espresso"
+                  >
+                    My Orders
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={handleLogoutClick}
+                    className="text-k-espresso"
+                  >
+                    Logout
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <button data-testid="nav-login" className="hover:text-k-copper-light transition-colors duration-300" onClick={handleLoginClick} type="button">
+              <button
+                data-testid="nav-login"
+                className={`${iconCls} min-h-[40px] inline-flex items-center`}
+                onClick={handleLoginClick}
+                type="button"
+              >
                 <FiUser size={19} strokeWidth={1.6} />
               </button>
             )}
           </div>
 
-          {/* Mobile */}
-          <div className={`md:hidden flex items-center gap-4 ${navText}`}>
+          <div className="md:hidden flex items-center gap-4">
             {showCartIcon && (
-              <Link href="/cart" data-testid="nav-cart-mobile" className="relative">
+              <Link
+                href="/cart"
+                data-testid="nav-cart-mobile"
+                className="relative min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
+              >
                 <FiShoppingCart size={22} strokeWidth={1.6} />
                 {hasCartItems && (
-                  <span className="absolute -top-2 -right-2 bg-k-copper text-k-ivory text-[9px] rounded-full h-4 w-4 flex items-center justify-center font-semibold">
+                  <span className="absolute -top-0 -right-0 bg-k-copper text-k-ivory text-[9px] rounded-full h-4 w-4 flex items-center justify-center font-semibold">
                     {cartData?.cartItems?.length || 0}
                   </span>
                 )}
@@ -187,8 +214,9 @@ export default function Nav({
             <button
               data-testid="nav-menu-toggle"
               onClick={() => setMobileMenuOpen((o) => !o)}
-              aria-label="Open menu"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               type="button"
+              className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
             >
               {mobileMenuOpen ? <FiX size={26} /> : <FiMenu size={26} />}
             </button>
@@ -196,32 +224,99 @@ export default function Nav({
         </div>
 
         <div
-          className={`fixed top-0 right-0 h-full w-[85%] max-w-sm bg-k-paper shadow-premium z-50 transform transition-transform duration-500 ease-out-expo ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"} md:hidden flex flex-col`}
+          className={`fixed top-0 right-0 h-full w-[85%] max-w-sm bg-k-paper shadow-premium z-50 transform transition-transform duration-500 ease-out-expo ${
+            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          } md:hidden flex flex-col`}
         >
           <div className="flex items-center justify-between p-6 border-b border-k-cream-200">
-            <span className="font-display italic text-2xl text-k-espresso">Koffelo<span className="text-k-copper-light not-italic">.</span></span>
-            <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" type="button" className="text-k-espresso">
+            <span className="font-display italic text-2xl text-k-espresso">
+              Koffelo<span className="text-k-copper not-italic">.</span>
+            </span>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close menu"
+              type="button"
+              className="text-k-espresso min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
+            >
               <FiX size={26} />
             </button>
           </div>
 
           <div className="flex flex-col p-6 gap-1 text-k-espresso">
-            <Link href="/" data-testid="mobile-nav-home" className="py-3 text-sm tracking-[0.22em] uppercase border-b border-k-cream-200" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-            <button data-testid="mobile-nav-products" className="py-3 text-sm tracking-[0.22em] uppercase border-b border-k-cream-200 text-left" onClick={() => { setMobileMenuOpen(false); router.push("/#collection"); }} type="button">Collection</button>
-            <Link href="/aboutus" data-testid="mobile-nav-about" className="py-3 text-sm tracking-[0.22em] uppercase border-b border-k-cream-200" onClick={() => setMobileMenuOpen(false)}>Story</Link>
-            <button data-testid="mobile-nav-contact" className="py-3 text-sm tracking-[0.22em] uppercase border-b border-k-cream-200 text-left" onClick={() => { setMobileMenuOpen(false); router.push("/#contact"); }} type="button">Contact</button>
+            <Link
+              href="/"
+              data-testid="mobile-nav-home"
+              className="py-4 text-sm tracking-[0.22em] uppercase border-b border-k-cream-200"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <button
+              data-testid="mobile-nav-products"
+              className="py-4 text-sm tracking-[0.22em] uppercase border-b border-k-cream-200 text-left"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                router.push("/#collection");
+              }}
+              type="button"
+            >
+              Collection
+            </button>
+            <Link
+              href="/aboutus"
+              data-testid="mobile-nav-about"
+              className="py-4 text-sm tracking-[0.22em] uppercase border-b border-k-cream-200"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Story
+            </Link>
+            <button
+              data-testid="mobile-nav-contact"
+              className="py-4 text-sm tracking-[0.22em] uppercase border-b border-k-cream-200 text-left"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                router.push("/#contact");
+              }}
+              type="button"
+            >
+              Contact
+            </button>
 
             <div className="mt-6">
               {isLoggedIn ? (
                 <div className="flex flex-col gap-2">
-                  <button className="flex items-center gap-3 py-3 text-sm text-left" onClick={() => { setMobileMenuOpen(false); router.push("/account"); }}><FiUser size={18} /> My Account</button>
-                  <button className="flex items-center gap-3 py-3 text-sm text-left" onClick={() => { setMobileMenuOpen(false); router.push("/orders"); }}><FiShoppingCart size={18} /> My Orders</button>
-                  <button className="flex items-center gap-3 py-3 text-sm text-left" onClick={() => { setMobileMenuOpen(false); handleLogoutClick(); }}><FiLogOut size={18} /> Logout</button>
+                  <button
+                    className="flex items-center gap-3 py-3 text-sm text-left min-h-[44px]"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      router.push("/account");
+                    }}
+                  >
+                    <FiUser size={18} /> My Account
+                  </button>
+                  <button
+                    className="flex items-center gap-3 py-3 text-sm text-left min-h-[44px]"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      router.push("/orders");
+                    }}
+                  >
+                    <FiShoppingCart size={18} /> My Orders
+                  </button>
+                  <button
+                    className="flex items-center gap-3 py-3 text-sm text-left min-h-[44px]"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      handleLogoutClick();
+                    }}
+                  >
+                    <FiLogOut size={18} /> Logout
+                  </button>
                 </div>
               ) : (
                 <button
                   data-testid="mobile-nav-login"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-k-espresso text-k-ivory rounded-full px-5 py-3 text-[12px] tracking-[0.22em] uppercase"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-k-espresso text-k-ivory rounded-full px-5 py-3 text-[12px] tracking-[0.22em] uppercase min-h-[48px]"
                   onClick={handleLoginClick}
                   type="button"
                 >
