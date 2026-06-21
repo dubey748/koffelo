@@ -2,59 +2,13 @@
 
 import { ENDPOINT } from "@/endpoint";
 import { axiosInstance } from "@/utils/axiosInstance";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { pushToDataLayer } from "@/utils/gtm";
 import { GTMTracker } from "@/utils/GTMEventManager";
-
-// Premium fallback display so the collection never feels empty
-const fallback = [
-  {
-    name: "The Signature",
-    description: "Nitro cold brew · classic body",
-    price: 899,
-    img: "https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?w=800&q=85&auto=format&fit=crop",
-    tag: "Best Seller",
-  },
-  {
-    name: "Midnight Reserve",
-    description: "Bold extract · deep roast",
-    price: 1199,
-    img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=800&q=85&auto=format&fit=crop",
-    tag: "Limited",
-  },
-  {
-    name: "Morning Whisper",
-    description: "Light bodied · floral notes",
-    price: 749,
-    img: "https://images.unsplash.com/photo-1442550528053-c431ecb55509?w=800&q=85&auto=format&fit=crop",
-    tag: "New",
-  },
-  {
-    name: "Atelier No. 4",
-    description: "Cold brew · single origin",
-    price: 949,
-    img: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&q=85&auto=format&fit=crop",
-    tag: "Editor's Pick",
-  },
-  {
-    name: "Slow Sunday",
-    description: "Pour-over · honey roast",
-    price: 829,
-    img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=85&auto=format&fit=crop",
-    tag: "Classic",
-  },
-  {
-    name: "The Carry-On",
-    description: "Travel pack · 4 cartridges",
-    price: 2499,
-    img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=800&q=85&auto=format&fit=crop",
-    tag: "Bundle",
-  },
-];
+import { FALLBACK_CATALOGUE } from "./_fallbackCatalogue";
 
 export default function FeaturedSections() {
-  const router = useRouter();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -74,45 +28,44 @@ export default function FeaturedSections() {
   }, []);
 
   const useFallback = products.length === 0;
-  const list = useFallback ? fallback : products.slice(0, 6);
+  const list = useFallback ? FALLBACK_CATALOGUE.slice(0, 6) : products.slice(0, 6);
 
-  const goToProduct = (product: any) => {
-    const actualProductId = product?.variants?.[0]?.productId;
-    if (!actualProductId) return;
+  const trackClick = (product: any, targetId: number | string) => {
     try {
-      GTMTracker.trackViewContent({
-        content_ids: [String(actualProductId)],
-        contents: [
-          {
-            id: actualProductId,
-            quantity: 1,
-            item_price: product?.variants?.[0]?.discountedPrice,
-          },
-        ],
-        content_type: "product",
-        value: product.variants[0]?.discountedPrice,
-        currency: "INR",
-        num_items: 1,
-        page_url: window.location.pathname,
-        page_title: document.title,
-      });
-      pushToDataLayer({
-        event: "ViewContent",
-        content_ids: [actualProductId],
-        contents: product.variants.map((it: any) => ({
-          id: it.productId,
-          quantity: 0,
-          item_price: it.price,
-        })),
-        content_type: "product",
-        value: 0,
-        currency: "INR",
-        num_items: 0,
-        page_url: window.location.pathname,
-        page_title: document.title,
-      });
+      if (product?.variants?.[0]) {
+        GTMTracker.trackViewContent({
+          content_ids: [String(targetId)],
+          contents: [
+            {
+              id: targetId,
+              quantity: 1,
+              item_price: product?.variants?.[0]?.discountedPrice,
+            },
+          ],
+          content_type: "product",
+          value: product.variants[0]?.discountedPrice,
+          currency: "INR",
+          num_items: 1,
+          page_url: window.location.pathname,
+          page_title: document.title,
+        });
+        pushToDataLayer({
+          event: "ViewContent",
+          content_ids: [targetId],
+          contents: product.variants.map((it: any) => ({
+            id: it.productId,
+            quantity: 0,
+            item_price: it.price,
+          })),
+          content_type: "product",
+          value: 0,
+          currency: "INR",
+          num_items: 0,
+          page_url: window.location.pathname,
+          page_title: document.title,
+        });
+      }
     } catch {}
-    router.push(`/product/${actualProductId}`);
   };
 
   return (
@@ -150,14 +103,13 @@ export default function FeaturedSections() {
               Six expressions of the same idea — coffee with personality, dressed
               for any moment. Choose your character below.
             </p>
-            <button
-              onClick={() => router.push("/")}
+            <Link
+              href="/#collection"
               data-testid="collection-view-all"
               className="text-[10px] sm:text-[11px] tracking-[0.25em] sm:tracking-[0.3em] uppercase text-k-copper link-underline min-h-[44px] inline-flex items-center"
-              type="button"
             >
               View all expressions →
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -174,37 +126,37 @@ export default function FeaturedSections() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
             {list.map((item: any, idx: number) => {
               const isApi = !useFallback;
-              const actualProductId = isApi
+              // Real ID from API, otherwise use the catalogue's id field
+              const productId = isApi
                 ? item?.variants?.[0]?.productId
-                : null;
+                : item.id;
               const productVariant = isApi ? item?.variants?.[0] : null;
               const image = isApi
                 ? item.bannerUrl ||
-                  fallback[idx % fallback.length].img
+                  FALLBACK_CATALOGUE[idx % FALLBACK_CATALOGUE.length].img
                 : item.img;
               const price = isApi
                 ? productVariant?.discountedPrice || productVariant?.price
-                : item.price;
+                : item.discountedPrice;
+              const originalPrice = isApi ? productVariant?.price : item.price;
               const tag = isApi
                 ? idx === 0
                   ? "Best Seller"
                   : null
                 : item.tag;
+              const subtitle = isApi
+                ? item.description
+                : item.shortDescription;
+
+              if (!productId) return null;
 
               return (
-                <article
-                  key={(actualProductId || idx).toString()}
+                <Link
+                  key={String(productId)}
+                  href={`/product/${productId}`}
                   data-testid={`collection-item-${idx}`}
-                  className="group cursor-pointer flex flex-col"
-                  onClick={() => goToProduct(item, idx)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      goToProduct(item, idx);
-                    }
-                  }}
+                  onClick={() => trackClick(item, productId)}
+                  className="group cursor-pointer flex flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-k-copper rounded-2xl sm:rounded-3xl"
                 >
                   <div className="relative aspect-[4/5] rounded-2xl sm:rounded-3xl overflow-hidden img-hover-zoom shadow-soft hover:shadow-premium transition-shadow duration-500 mb-5 bg-k-cream-100">
                     <img
@@ -226,8 +178,8 @@ export default function FeaturedSections() {
                       </div>
                     )}
 
-                    {/* Hover overlay CTA */}
-                    <div className="absolute bottom-4 left-4 right-4 bg-k-ivory text-k-espresso rounded-full px-5 py-3 flex items-center justify-between text-[10px] tracking-[0.22em] uppercase font-medium opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out-expo">
+                    {/* Always-visible View Product CTA bar (mobile) / hover-reveal (desktop) */}
+                    <div className="absolute bottom-4 left-4 right-4 bg-k-ivory text-k-espresso rounded-full px-5 py-3 flex items-center justify-between text-[10px] tracking-[0.22em] uppercase font-medium opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-3 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-500 ease-out-expo shadow-soft">
                       <span>View product</span>
                       <span className="text-k-copper">→</span>
                     </div>
@@ -235,11 +187,11 @@ export default function FeaturedSections() {
 
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
-                      <h3 className="font-display text-xl sm:text-2xl text-k-espresso leading-tight mb-1 truncate">
+                      <h3 className="font-display text-xl sm:text-2xl text-k-espresso leading-tight mb-1 truncate group-hover:text-k-copper transition-colors duration-400">
                         {item.name}
                       </h3>
                       <p className="text-sm text-k-ink-muted line-clamp-1">
-                        {item.description}
+                        {subtitle}
                       </p>
                     </div>
                     {price && (
@@ -247,18 +199,16 @@ export default function FeaturedSections() {
                         <div className="font-display text-lg text-k-copper">
                           ₹{price}
                         </div>
-                        {isApi &&
-                          productVariant?.discountedPrice &&
-                          productVariant?.price !==
-                            productVariant?.discountedPrice && (
+                        {originalPrice &&
+                          String(originalPrice) !== String(price) && (
                             <div className="text-xs text-k-ink-muted line-through">
-                              ₹{productVariant?.price}
+                              ₹{originalPrice}
                             </div>
                           )}
                       </div>
                     )}
                   </div>
-                </article>
+                </Link>
               );
             })}
           </div>

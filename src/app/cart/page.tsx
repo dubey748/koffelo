@@ -109,29 +109,56 @@ export default function CartPage() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#F8F1E9] flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8B5E3C] mx-auto mb-4"></div>
-          <p className="text-[#8B5E3C]">Loading your cart...</p>
+      <>
+        <Nav showCartIcon />
+        <div className="min-h-screen bg-k-ivory flex items-center justify-center pt-28">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-10 w-10 border-2 border-k-cream-200 border-t-k-copper mx-auto mb-4" />
+            <p className="text-[11px] tracking-[0.3em] uppercase text-k-walnut">
+              Loading your cart…
+            </p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
-  // Error state
+  // Error / unreachable API — degrade gracefully to empty-cart presentation
   if (error) {
     return (
-      <div className="min-h-screen bg-[#F8F1E9] flex items-center justify-center">
-        <div className="text-center px-4">
-          <p className="text-red-500 mb-4">Failed to load cart items</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-[#8B5E3C] text-white px-4 py-2 rounded-md hover:bg-opacity-90"
-          >
-            Retry
-          </button>
+      <>
+        <Nav showCartIcon />
+        <div className="min-h-screen bg-k-ivory pt-28 md:pt-32 pb-20">
+          <div className="container-koffee">
+            <div className="flex items-center gap-3 sm:gap-4 mb-6">
+              <span className="block w-8 sm:w-10 h-px bg-k-copper" />
+              <span className="text-[10px] tracking-[0.4em] uppercase text-k-copper">
+                Your Bag
+              </span>
+            </div>
+            <h1 className="font-display text-[clamp(2.25rem,5vw,4rem)] leading-[0.95] tracking-tightest text-k-espresso mb-6">
+              Your bag is{" "}
+              <span className="italic text-k-copper">empty.</span>
+            </h1>
+            <p className="text-k-ink-muted text-lg leading-relaxed max-w-md mb-10">
+              Browse the Collection and fill it with something worth waking up
+              for.
+            </p>
+            <Link
+              href="/#collection"
+              data-testid="cart-empty-cta"
+              className="group inline-flex items-center gap-3 sm:gap-4 pl-6 sm:pl-8 pr-2 py-2 bg-k-espresso text-k-ivory rounded-full hover:bg-k-coffee transition-all duration-500 ease-out-expo min-h-[52px]"
+            >
+              <span className="text-[11px] sm:text-[12px] tracking-[0.22em] sm:tracking-[0.25em] uppercase font-medium">
+                Discover the Collection
+              </span>
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-k-copper text-k-ivory transition-transform duration-500 group-hover:rotate-45">
+                →
+              </span>
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 

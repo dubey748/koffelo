@@ -54,20 +54,32 @@ const AboutUsPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
-      <div>
-        <Nav />
-      </div>
-      <div className="relative bg-gradient-to-r via-orange-800 text-white py-20">
-        <div className="absolute inset-0 bg-black opacity-40"></div>
-        <div className="relative max-w-6xl mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-4">About Morning Brew</h1>
-          <p className="text-xl opacity-90 max-w-2xl mx-auto">
+    <div className="min-h-screen bg-k-ivory">
+      <Nav />
+      {/* Atelier hero */}
+      <section className="relative bg-k-paper text-k-espresso pt-32 md:pt-40 pb-16 md:pb-24 overflow-hidden border-b border-k-cream-200">
+        <div
+          aria-hidden
+          className="absolute -top-32 -right-32 w-[34rem] h-[34rem] rounded-full bg-k-copper/10 blur-[110px] pointer-events-none"
+        />
+        <div className="absolute inset-0 grain-overlay opacity-30 pointer-events-none" />
+        <div className="container-koffee relative">
+          <div className="flex items-center gap-3 sm:gap-4 mb-6 md:mb-8">
+            <span className="block w-8 sm:w-10 h-px bg-k-copper" />
+            <span className="text-[9px] sm:text-[10px] tracking-[0.35em] sm:tracking-[0.4em] uppercase text-k-copper">
+              Our Story · Est. MMXX
+            </span>
+          </div>
+          <h1 className="font-display text-[clamp(2.5rem,7vw,6rem)] leading-[0.92] tracking-tightest text-k-espresso mb-6 md:mb-8 text-balance max-w-4xl">
+            About{" "}
+            <span className="italic text-k-copper">Morning Brew.</span>
+          </h1>
+          <p className="text-lg md:text-xl text-k-ink-muted leading-relaxed max-w-2xl">
             Crafting exceptional coffee experiences while maintaining
-            transparency and trust with our valued customers
+            transparency and trust with our valued customers.
           </p>
         </div>
-      </div>
+      </section>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="bg-white rounded-lg shadow-xl p-8 mb-12">
