@@ -25,15 +25,15 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mb-12 md:mb-16">
+        <div className="mb-14 md:mb-20">
           <Link
             href="/"
-            className="font-display italic text-[clamp(3.5rem,14vw,12rem)] leading-[0.85] tracking-tightest text-k-espresso inline-block transition-colors duration-500 hover:text-k-copper"
+            className="font-display italic text-[clamp(3.5rem,14vw,12rem)] leading-none tracking-tightest text-k-espresso inline-block pb-3 sm:pb-5 transition-colors duration-500 hover:text-k-copper"
           >
             Koffelo
             <span className="text-k-copper not-italic">.</span>
           </Link>
-          <p className="font-display text-lg sm:text-xl md:text-2xl text-k-ink-muted italic mt-3 md:mt-4 max-w-xl">
+          <p className="font-display text-lg sm:text-xl md:text-2xl text-k-ink-muted italic mt-6 md:mt-8 max-w-xl">
             United by coffee, in pursuit of quiet excellence.
           </p>
         </div>
