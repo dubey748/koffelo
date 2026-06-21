@@ -7,40 +7,92 @@ export default function Footer() {
     <footer
       id="contact"
       data-testid="site-footer"
-      className="bg-k-espresso text-k-paper relative overflow-hidden"
+      className="bg-k-paper text-k-espresso relative overflow-hidden border-t border-k-cream-200"
     >
-      {/* Subtle gold accent line */}
-      <div className="divider-gold" />
-
       <div className="container-koffee py-16 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12">
-          {/* Brand */}
-          <div className="md:col-span-5">
-            <div className="font-display text-4xl md:text-5xl mb-5 text-k-paper">
-              Koffelo<span className="text-k-gold">.</span>
+        {/* Top — giant wordmark */}
+        <div className="mb-12 md:mb-16">
+          <Link
+            href="/"
+            className="font-display text-[clamp(4rem,12vw,11rem)] leading-[0.85] uppercase tracking-tightest text-k-espresso inline-block hover:text-k-coffee transition-colors duration-500"
+          >
+            Koffelo<span className="text-k-gold">.</span>
+          </Link>
+          <p className="font-display text-xl md:text-2xl text-k-ink-muted italic mt-4 max-w-xl">
+            United by coffee. Brewed with intention.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-10 mb-12 md:mb-16">
+          {/* Explore */}
+          <div className="md:col-span-3">
+            <div className="text-[11px] tracking-[0.22em] uppercase text-k-gold mb-5">
+              Explore
             </div>
-            <p className="text-k-cream-50/75 leading-relaxed mb-8 max-w-md">
-              Premium coffee crafted for bold flavor, smooth aroma, and a
-              wholesome experience. We blend tradition with innovation to bring
-              you a cup that energizes and delights every day.
-            </p>
-            <Link
-              href="/aboutus#terms"
-              data-testid="footer-terms"
-              className="text-sm tracking-[0.18em] uppercase text-k-amber link-underline inline-block"
-            >
-              Terms &amp; Conditions
-            </Link>
+            <ul className="space-y-3">
+              {[
+                { label: "Shop", href: "/#products" },
+                { label: "How It Works", href: "/#how-it-works" },
+                { label: "About", href: "/aboutus" },
+                { label: "Cart", href: "/cart" },
+              ].map((l) => (
+                <li key={l.label}>
+                  <Link
+                    href={l.href}
+                    data-testid={`footer-link-${l.label.toLowerCase().replace(/\s/g, "-")}`}
+                    className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div className="md:col-span-3">
+            <div className="text-[11px] tracking-[0.22em] uppercase text-k-gold mb-5">
+              Support
+            </div>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  href="/aboutus#terms"
+                  data-testid="footer-terms"
+                  className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
+                >
+                  Terms &amp; Conditions
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/account"
+                  className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
+                >
+                  My Account
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/orders"
+                  className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
+                >
+                  My Orders
+                </Link>
+              </li>
+            </ul>
           </div>
 
           {/* Contact */}
-          <div className="md:col-span-4">
-            <div className="eyebrow text-k-amber mb-5">— Contact</div>
-            <ul className="space-y-3 text-k-cream-50/75 select-text-on">
+          <div className="md:col-span-3">
+            <div className="text-[11px] tracking-[0.22em] uppercase text-k-gold mb-5">
+              Contact
+            </div>
+            <ul className="space-y-3 select-text-on">
               <li>
                 <a
                   href="mailto:info@morningbrew.com"
-                  className="hover:text-k-amber transition-colors duration-300"
+                  className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
                 >
                   info@morningbrew.com
                 </a>
@@ -48,23 +100,25 @@ export default function Footer() {
               <li>
                 <a
                   href="tel:+919667946833"
-                  className="hover:text-k-amber transition-colors duration-300"
+                  className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
                 >
                   +91 966-794-6833
                 </a>
               </li>
-              <li className="text-sm leading-relaxed pt-2 border-t border-k-paper/10">
-                Urbtech Trade Centre, IS 16, 1601<br />
-                First Floor, Sector 132<br />
-                Gautam Buddha Nagar, Noida 201301, U.P.
+              <li className="text-sm text-k-ink-muted leading-relaxed pt-2">
+                Urbtech Trade Centre, IS 16, 1601
+                <br />
+                Sector 132, Noida 201301, U.P.
               </li>
             </ul>
           </div>
 
           {/* Follow */}
           <div className="md:col-span-3">
-            <div className="eyebrow text-k-amber mb-5">— Follow</div>
-            <div className="flex gap-3">
+            <div className="text-[11px] tracking-[0.22em] uppercase text-k-gold mb-5">
+              Follow
+            </div>
+            <div className="flex gap-2 flex-wrap">
               {[
                 { href: "https://www.facebook.com/koffelo/", Icon: Facebook, label: "Facebook" },
                 { href: "https://www.instagram.com/koffelo_brew/", Icon: Instagram, label: "Instagram" },
@@ -78,26 +132,24 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   aria-label={label}
                   data-testid={`footer-social-${label.toLowerCase()}`}
-                  className="w-10 h-10 rounded-full border border-k-paper/15 flex items-center justify-center text-k-paper/70 hover:text-k-espresso hover:bg-k-amber hover:border-k-amber transition-all duration-400 ease-out-expo"
+                  className="w-11 h-11 rounded-full border border-k-espresso/20 flex items-center justify-center text-k-espresso/70 hover:text-k-paper hover:bg-k-espresso hover:border-k-espresso transition-all duration-400 ease-out-expo"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
-
-            <p className="text-xs text-k-cream-50/50 mt-8 leading-relaxed">
-              Crafted slowly. Shipped freshly.<br />
-              Made for those who notice the difference.
+            <p className="text-xs text-k-ink-muted mt-6 leading-relaxed">
+              Tag us <span className="text-k-gold">@koffelo</span> — get featured.
             </p>
           </div>
         </div>
 
-        <div className="border-t border-k-paper/10 mt-14 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs tracking-wider text-k-cream-50/50">
-            © {new Date().getFullYear()} Koffelo · United by Coffee
+        <div className="border-t border-k-cream-200 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs tracking-wider text-k-ink-muted">
+            © {new Date().getFullYear()} Koffelo. All rights reserved.
           </p>
-          <p className="text-xs tracking-[0.2em] uppercase text-k-cream-50/40">
-            Made with care · Brewed with intention
+          <p className="text-[10px] tracking-[0.25em] uppercase text-k-ink-muted/70">
+            Crafted slowly. Shipped freshly.
           </p>
         </div>
       </div>

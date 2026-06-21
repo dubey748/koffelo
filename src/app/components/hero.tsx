@@ -1,63 +1,9 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
-  const videos = ["/Videos/noc.webm", "/Videos/bannervideo.webm"];
-  const [index, setIndex] = useState<number>(0);
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const videoRefsRef = useRef<Array<HTMLVideoElement | null>>([null, null]);
-  const [muted, setMuted] = useState<boolean>(true);
-
-  useEffect(() => {
-    const active = videoRefsRef.current[index];
-    const inactive = videoRefsRef.current[1 - index];
-
-    if (inactive) {
-      try {
-        inactive.pause();
-        inactive.currentTime = 0;
-      } catch {}
-    }
-
-    if (active) {
-      try {
-        active.muted = muted;
-      } catch {}
-
-      if (!muted && index === 0) {
-        const p = active.play();
-        if (p && typeof p.then === "function") {
-          p.catch(() => {
-            try {
-              active.muted = true;
-              active.play().catch(() => {});
-            } catch {}
-            setMuted(true);
-          });
-        }
-      } else {
-        const p = active.play();
-        if (p && typeof p.then === "function") p.catch(() => {});
-      }
-    }
-
-    if (trackRef.current) {
-      const pct = (index / videos.length) * 100;
-      trackRef.current.style.transform = `translateX(-${pct}%)`;
-    }
-  }, [index, muted, videos.length]);
-
-  useEffect(() => {
-    const cleanups: Array<() => void> = [];
-    videoRefsRef.current.forEach((el) => {
-      if (!el) return;
-      const onEnded = () => setIndex((prev) => (prev + 1) % videos.length);
-      el.addEventListener("ended", onEnded);
-      cleanups.push(() => el.removeEventListener("ended", onEnded));
-    });
-    return () => cleanups.forEach((c) => c());
-  }, [videos.length]);
+  const router = useRouter();
 
   const scrollToProducts = () => {
     const el = document.getElementById("products");
@@ -67,134 +13,141 @@ export default function Hero() {
   return (
     <section
       data-testid="hero-section"
-      className="relative w-full h-[60vh] min-h-[460px] sm:h-[70vh] md:h-[78vh] lg:h-[88vh] text-k-paper overflow-hidden bg-k-espresso"
+      className="relative bg-k-cream overflow-hidden"
     >
-      {/* Video track */}
+      {/* Decorative noise */}
+      <div className="absolute inset-0 grain-overlay pointer-events-none opacity-60" />
+
+      {/* Floating bean decorations */}
       <div
-        ref={trackRef}
-        className="flex w-[200%] h-full transition-transform duration-1200 ease-out-expo"
-        style={{ transform: `translateX(-${(index / videos.length) * 100}%)` }}
-      >
-        {videos.map((src, i) => (
-          <div key={src} className="w-1/2 flex-shrink-0 h-full">
-            <video
-              ref={(el) => {
-                videoRefsRef.current[i] = el;
-              }}
-              className="w-full h-full object-cover"
-              src={src}
-              playsInline
-              preload="metadata"
-              autoPlay
-              muted={muted}
-              loop={false}
-            />
-          </div>
-        ))}
-      </div>
+        aria-hidden
+        className="absolute -top-10 -left-10 w-72 h-72 rounded-full bg-k-amber/15 blur-3xl pointer-events-none"
+      />
+      <div
+        aria-hidden
+        className="absolute bottom-0 right-0 w-[28rem] h-[28rem] rounded-full bg-k-gold/10 blur-3xl pointer-events-none"
+      />
 
-      {/* Cinematic gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-k-espresso/55 via-k-espresso/20 to-k-espresso/75 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-k-espresso/45 via-transparent to-transparent pointer-events-none" />
-
-      {/* Content overlay */}
-      <div className="absolute inset-0 z-10 flex items-center">
-        <div className="container-koffee w-full">
-          <div className="max-w-3xl">
-            <div className="eyebrow text-k-amber mb-5 md:mb-7 animate-fade-in-down">
-              United by Coffee · Crafted with Care
+      <div className="container-koffee relative pt-12 md:pt-16 pb-20 md:pb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-6 items-center">
+          {/* LEFT: Bold editorial copy */}
+          <div className="lg:col-span-7 relative z-10">
+            <div
+              data-testid="hero-eyebrow"
+              className="inline-flex items-center gap-2 mb-6 md:mb-8 px-4 py-2 rounded-full bg-k-espresso/8 border border-k-espresso/15"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-k-gold animate-pulse" />
+              <span className="text-[11px] tracking-[0.22em] uppercase text-k-espresso/85">
+                Coffee 2.0 · United by Koffelo
+              </span>
             </div>
+
             <h1
               data-testid="hero-headline"
-              className="font-display text-display-xl md:text-display-2xl text-k-paper mb-6 md:mb-8 animate-fade-in-up"
+              className="font-display text-[clamp(3rem,8.5vw,8rem)] leading-[0.92] tracking-tightest text-k-espresso mb-7 md:mb-9 uppercase"
             >
-              Coffee, <em className="italic text-k-amber font-normal">redefined.</em>
+              Real Nitro
               <br />
-              Brewed for the bold.
+              Cold&nbsp;Brew{" "}
+              <em className="italic font-normal text-k-gold lowercase tracking-tight">
+                in&nbsp;under
+              </em>
+              <br />
+              10&nbsp;Seconds.
             </h1>
-            <p
-              className="text-base md:text-lg text-k-cream-50/85 max-w-xl mb-8 md:mb-10 leading-relaxed animate-fade-in-up delay-200"
-            >
-              India&apos;s first nitro cold brew cartridge — a sophisticated ritual
-              for late nights, early mornings, and every moment in between.
+
+            <p className="text-lg md:text-xl text-k-ink-muted leading-relaxed max-w-xl mb-9 md:mb-11">
+              A nitrogen-infused cold brew concentrate, pocket-sized.
+              No machine, no fridge, no waiting — just smooth, bold flavor,
+              anywhere your day takes you.
             </p>
-            <div className="flex flex-wrap items-center gap-4 animate-fade-in-up delay-400">
+
+            <div className="flex flex-wrap items-center gap-5 mb-12 md:mb-14">
               <button
                 data-testid="hero-shop-btn"
                 onClick={scrollToProducts}
-                className="btn-pill-gold hover-lift group"
+                className="group inline-flex items-center gap-3 bg-k-espresso text-k-paper px-8 py-4 rounded-full text-sm tracking-[0.18em] uppercase font-medium hover:bg-k-coffee transition-all duration-500 ease-out-expo hover-lift"
                 type="button"
               >
-                <span>Shop the Collection</span>
-                <span className="inline-block transition-transform duration-400 group-hover:translate-x-1">→</span>
+                Try Koffelo NOC
+                <span className="inline-block w-6 h-px bg-k-paper transition-all duration-500 group-hover:w-10" />
+                <span className="transition-transform duration-500 group-hover:translate-x-1">
+                  →
+                </span>
               </button>
               <a
-                href="/aboutus"
-                data-testid="hero-story-btn"
-                className="text-sm tracking-[0.18em] uppercase text-k-paper/90 hover:text-k-amber link-underline"
+                href="#how-it-works"
+                data-testid="hero-how-btn"
+                className="text-sm tracking-[0.2em] uppercase text-k-espresso/80 hover:text-k-gold transition-colors duration-400 inline-flex items-center gap-2 group"
               >
-                Our Story
+                See how it works
+                <span className="inline-block transition-transform duration-500 group-hover:translate-y-1">
+                  ↓
+                </span>
               </a>
+            </div>
+
+            {/* Stat tiles */}
+            <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-xl">
+              {[
+                { value: "180mg", label: "Clean caffeine" },
+                { value: "0g", label: "Sugar added" },
+                { value: "N₂", label: "Nitrogen infused" },
+              ].map((s, i) => (
+                <div
+                  key={i}
+                  data-testid={`hero-stat-${i}`}
+                  className="px-4 py-4 sm:px-5 sm:py-5 rounded-2xl bg-k-paper/60 backdrop-blur-sm border border-k-cream-200"
+                >
+                  <div className="font-display text-2xl sm:text-3xl md:text-4xl text-k-espresso leading-none mb-1.5">
+                    {s.value}
+                  </div>
+                  <div className="text-[10px] sm:text-[11px] tracking-[0.18em] uppercase text-k-ink-muted">
+                    {s.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT: NOC product banner */}
+          <div className="lg:col-span-5 relative">
+            <div className="relative img-hover-zoom rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden shadow-premium aspect-[4/5] lg:aspect-[3/4] bg-k-espresso">
+              <img
+                src="/assets/Banner.jpg"
+                alt="Koffelo NOC — Nitro Cold Brew Cartridge"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              {/* Subtle vignette */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-k-espresso/30 via-transparent to-transparent" />
+
+              {/* Floating "NEW" badge */}
+              <div className="absolute top-5 left-5 md:top-6 md:left-6 bg-k-gold text-k-espresso px-3 py-1.5 rounded-full text-[10px] tracking-[0.25em] uppercase font-medium animate-float">
+                New · NOC
+              </div>
+
+              {/* Floating bottom card */}
+              <div className="absolute bottom-5 right-5 md:bottom-6 md:right-6 max-w-[200px] bg-k-paper/95 backdrop-blur-md rounded-2xl p-4 shadow-medium">
+                <div className="text-[10px] tracking-[0.22em] uppercase text-k-gold mb-1">
+                  Best Seller
+                </div>
+                <div className="font-display text-lg text-k-espresso leading-tight mb-2">
+                  India&apos;s first nitro
+                  <br />
+                  cold brew cartridge.
+                </div>
+                <button
+                  onClick={scrollToProducts}
+                  className="text-[11px] tracking-[0.2em] uppercase text-k-espresso link-underline"
+                  type="button"
+                >
+                  Shop now →
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Slide indicators */}
-      <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
-        {videos.map((_, i) => (
-          <button
-            key={i}
-            data-testid={`hero-dot-${i}`}
-            aria-label={`Show banner ${i + 1}`}
-            onClick={() => setIndex(i)}
-            className={`h-1 rounded-full transition-all duration-500 ease-out-expo ${
-              i === index ? "w-10 bg-k-amber" : "w-5 bg-k-paper/40 hover:bg-k-paper/70"
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* Mute/Unmute */}
-      <button
-        data-testid="hero-mute-btn"
-        aria-label={muted ? "Unmute" : "Mute"}
-        onClick={() => {
-          const next = !muted;
-          setMuted(next);
-          const v = videoRefsRef.current[index];
-          if (!v) return;
-          try {
-            v.muted = next;
-            if (!next) v.play().catch(() => {});
-          } catch {}
-        }}
-        className="absolute right-5 md:right-8 bottom-6 md:bottom-8 z-30 w-11 h-11 rounded-full bg-k-espresso/60 backdrop-blur-md border border-k-paper/20 text-k-paper hover:bg-k-espresso/80 transition-all duration-400 flex items-center justify-center"
-      >
-        {muted ? (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-            <line x1="23" y1="9" x2="17" y2="15" />
-            <line x1="17" y1="9" x2="23" y2="15" />
-          </svg>
-        ) : (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
-          </svg>
-        )}
-      </button>
-
-      {/* Scroll cue */}
-      <button
-        onClick={scrollToProducts}
-        data-testid="hero-scroll-cue"
-        className="hidden md:flex absolute left-1/2 -translate-x-1/2 bottom-20 z-20 flex-col items-center gap-2 text-k-paper/70 hover:text-k-amber transition-colors duration-400 group"
-        aria-label="Scroll to products"
-      >
-        <span className="text-[10px] tracking-[0.3em] uppercase">Scroll</span>
-        <span className="block w-px h-10 bg-current animate-pulse" />
-      </button>
     </section>
   );
 }
