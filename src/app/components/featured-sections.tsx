@@ -196,10 +196,15 @@ export default function FeaturedSections() {
                   key={(actualProductId || idx).toString()}
                   data-testid={`collection-item-${idx}`}
                   className="group cursor-pointer flex flex-col"
-                  onClick={() => isApi && goToProduct(item)}
-                  role={isApi ? "button" : undefined}
-                  tabIndex={isApi ? 0 : undefined}
-                  style={{ cursor: isApi ? "pointer" : "default" }}
+                  onClick={() => goToProduct(item, idx)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      goToProduct(item, idx);
+                    }
+                  }}
                 >
                   <div className="relative aspect-[4/5] rounded-2xl sm:rounded-3xl overflow-hidden img-hover-zoom shadow-soft hover:shadow-premium transition-shadow duration-500 mb-5 bg-k-cream-100">
                     <img

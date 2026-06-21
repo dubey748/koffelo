@@ -1,9 +1,15 @@
 import { notFound } from "next/navigation";
+import Nav from "../../components/nav";
+import Footer from "../../components/footer";
 import ProductDetail from "../../components/ProductDetails";
+import ProductPreview from "../../components/ProductPreview";
 import { axiosInstance } from "@/utils/axiosInstance";
 import { ENDPOINT } from "@/endpoint";
 import { TProductDetails } from "@/app/components/types";
-import axios from "axios";
+import {
+  FALLBACK_CATALOGUE,
+  FallbackProduct,
+} from "@/app/components/_fallbackCatalogue";
 
 interface AllProductsApiResponse {
   success: boolean;
@@ -45,16 +51,35 @@ interface AllProductsApiResponse {
   };
 }
 
-const getproductDetails = async (
-  variantId: string
-): Promise<TProductDetails["productDetails"]> => {
+type Outcome =
+  | { kind: "api"; details: TProductDetails["productDetails"] }
+  | { kind: "preview"; product: FallbackProduct; others: FallbackProduct[] }
+  | { kind: "notfound" };
+
+const resolveProduct = async (variantId: string): Promise<Outcome> => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  // If no API URL configured, render the premium preview straight away
+  if (!apiUrl) {
+    const numericId = Number(variantId);
+    const match = FALLBACK_CATALOGUE.find((p) => p.id === numericId);
+    if (match) {
+      return {
+        kind: "preview",
+        product: match,
+        others: FALLBACK_CATALOGUE.filter((p) => p.id !== match.id),
+      };
+    }
+    return { kind: "notfound" };
+  }
+
+  // API path
   try {
     const res = await axiosInstance.get<AllProductsApiResponse>(
       ENDPOINT.GET_PRODUCT_INFO
     );
 
     const allProducts = res?.data?.data?.products || [];
-
     let foundProduct: TProductDetails["productDetails"] | undefined;
 
     for (const mainProduct of allProducts) {
@@ -63,16 +88,10 @@ const getproductDetails = async (
       );
 
       if (foundVariant) {
-        const primaryImage =
-          foundVariant.images.find((img) => img.isPrimary)?.imageUrl ||
-          foundVariant.images[0]?.imageUrl ||
-          "/assets/placeholder.png";
-
         foundProduct = {
           product: {
             productId: foundVariant.productId,
             name: mainProduct.name,
-
             description: mainProduct.description,
             productShortDescription: mainProduct.productShortDescription,
             productUsp: mainProduct.productUsp,
@@ -118,16 +137,24 @@ const getproductDetails = async (
     }
 
     if (!foundProduct) {
-      notFound();
+      return { kind: "notfound" };
     }
 
-    return foundProduct;
+    return { kind: "api", details: foundProduct };
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 404) {
-      notFound();
-    }
     console.error("Failed to fetch product details:", error);
-    notFound();
+    // Graceful degradation: if the configured API errors out, fall back
+    // to preview mode for known IDs so the page never hard-crashes.
+    const numericId = Number(variantId);
+    const match = FALLBACK_CATALOGUE.find((p) => p.id === numericId);
+    if (match) {
+      return {
+        kind: "preview",
+        product: match,
+        others: FALLBACK_CATALOGUE.filter((p) => p.id !== match.id),
+      };
+    }
+    return { kind: "notfound" };
   }
 };
 
@@ -136,7 +163,21 @@ export default async function ProductPage({
 }: {
   params: { productId: string };
 }) {
-  const productDetails = await getproductDetails(params?.productId);
+  const outcome = await resolveProduct(params?.productId);
 
-  return <ProductDetail productDetails={productDetails} />;
+  if (outcome.kind === "notfound") {
+    notFound();
+  }
+
+  if (outcome.kind === "preview") {
+    return (
+      <>
+        <Nav />
+        <ProductPreview product={outcome.product} others={outcome.others} />
+        <Footer />
+      </>
+    );
+  }
+
+  return <ProductDetail productDetails={outcome.details} />;
 }
