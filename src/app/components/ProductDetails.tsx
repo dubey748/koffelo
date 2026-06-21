@@ -333,7 +333,7 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
   const fetchReviews = async (id: number, pageNumber = 1) => {
     try {
       const resp = await axiosInstance.get(
-        `${ENDPOINT.GET_REVIEWS}/${id}/reviews?page=${pageNumber}&limit=${limit}`
+        `${ENDPOINT.GET_REVIEWS}/${id}/reviews?page=${pageNumber}&limit=${limit}`,
       );
 
       const data: any = resp?.data?.data ?? resp?.data;
@@ -346,7 +346,7 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
         const all = [...prev, ...fetched];
         const unique = all.filter(
           (item, index, self) =>
-            index === self.findIndex((rv) => rv.id === item.id)
+            index === self.findIndex((rv) => rv.id === item.id),
         );
         return unique;
       });
@@ -392,7 +392,7 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
               ? fetched
               : [...(reviews || []), ...fetched].filter(
                   (item, index, self) =>
-                    index === self.findIndex((rv) => rv.id === item.id)
+                    index === self.findIndex((rv) => rv.id === item.id),
                 );
 
           const found = combined.some((rv: any) => {
@@ -472,7 +472,7 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
     const all = Array.from(files);
     if (all.length > MAX_FILES) {
       toast(
-        `Only up to ${MAX_FILES} images are allowed. Taking the first ${MAX_FILES}.`
+        `Only up to ${MAX_FILES} images are allowed. Taking the first ${MAX_FILES}.`,
       );
     }
     const sliced = all.slice(0, MAX_FILES);
@@ -486,8 +486,8 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
     if (rejected.length > 0) {
       toast.error(
         `Some files were too large (max 5MB) and were skipped: ${rejected.join(
-          ", "
-        )}`
+          ", ",
+        )}`,
       );
     }
 
@@ -498,7 +498,7 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
           const fr = new FileReader();
           fr.onload = () => res(fr.result as string);
           fr.readAsDataURL(file);
-        })
+        }),
     );
     Promise.all(readers).then((urls) => setImagePreviews(urls));
   };
@@ -524,7 +524,7 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
 
           const uploadResp = await axiosInstance.post(
             "/api/storage/upload",
-            form
+            form,
           );
 
           const uploadData = uploadResp?.data?.data?.paths ?? null;
@@ -617,16 +617,19 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
                   // prefer server-provided counts when available
                   let countsByRating: Record<number, number> = (
                     breakdown || []
-                  ).reduce((acc: any, b: any) => {
-                    if (b && typeof b.rating !== "undefined") {
-                      acc[b.rating] = (acc[b.rating] || 0) + (b.count || 0);
-                    }
-                    return acc;
-                  }, {} as Record<number, number>);
+                  ).reduce(
+                    (acc: any, b: any) => {
+                      if (b && typeof b.rating !== "undefined") {
+                        acc[b.rating] = (acc[b.rating] || 0) + (b.count || 0);
+                      }
+                      return acc;
+                    },
+                    {} as Record<number, number>,
+                  );
 
                   let totalCount = Object.values(countsByRating).reduce(
                     (s: number, v: number) => s + (v || 0),
-                    0
+                    0,
                   );
 
                   // If server didn't give breakdown counts, estimate from loaded reviews and scale to meta.totalReviews
@@ -634,11 +637,14 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
                     const sample = reviews || [];
                     const sampleTotal = sample.length || 0;
                     const targetTotal = meta.totalReviews || sampleTotal || 0;
-                    const sampleCounts = sample.reduce((acc: any, r: any) => {
-                      const rr = r?.rating || 0;
-                      if (rr) acc[rr] = (acc[rr] || 0) + 1;
-                      return acc;
-                    }, {} as Record<number, number>);
+                    const sampleCounts = sample.reduce(
+                      (acc: any, r: any) => {
+                        const rr = r?.rating || 0;
+                        if (rr) acc[rr] = (acc[rr] || 0) + 1;
+                        return acc;
+                      },
+                      {} as Record<number, number>,
+                    );
 
                     // scale sample counts proportionally to targetTotal when possible
                     countsByRating = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
@@ -647,7 +653,7 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
                         const key = Number(k);
                         const sc = sampleCounts[key] || 0;
                         countsByRating[key] = Math.round(
-                          (sc / sampleTotal) * targetTotal
+                          (sc / sampleTotal) * targetTotal,
                         );
                       });
                     } else {
@@ -658,7 +664,7 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
                     totalCount =
                       Object.values(countsByRating).reduce(
                         (s: number, v: number) => s + (v || 0),
-                        0
+                        0,
                       ) || targetTotal;
                   }
 
@@ -775,10 +781,10 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
                                 type="button"
                                 onClick={() => {
                                   const nextFiles = imageFiles.filter(
-                                    (_, i) => i !== idx
+                                    (_, i) => i !== idx,
                                   );
                                   const nextPreviews = imagePreviews.filter(
-                                    (_, i) => i !== idx
+                                    (_, i) => i !== idx,
                                   );
                                   setImageFiles(nextFiles);
                                   setImagePreviews(nextPreviews);
@@ -844,7 +850,7 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
                               {new Date(
                                 (review as any).createdAt ||
                                   (review as any).timeAgo ||
-                                  Date.now()
+                                  Date.now(),
                               ).toLocaleDateString()}
                             </span>
                           </div>
@@ -877,7 +883,7 @@ const ReviewsSection = ({ productId }: { productId: number }) => {
                                   />
                                   <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/image:opacity-100 transition-opacity" />
                                 </div>
-                              )
+                              ),
                             )}
                           </div>
                         )}
@@ -986,17 +992,17 @@ const ProductPage: React.FC<TProductDetails> = ({ productDetails }) => {
   const cartItems = data?.cartItems ?? [];
 
   const currentItemInCart = cartItems.find(
-    (item: CartItem) => item.productId === product.productId
+    (item: CartItem) => item.productId === product.productId,
   );
 
   const currentPrice = useMemo(
     () => parseFloat(product.discountedPrice),
-    [product.discountedPrice]
+    [product.discountedPrice],
   );
 
   const originalPrice = useMemo(
     () => parseFloat(product.price),
-    [product.price]
+    [product.price],
   );
 
   // Treat specific product names as Inaugural Offer variants
@@ -1036,7 +1042,7 @@ const ProductPage: React.FC<TProductDetails> = ({ productDetails }) => {
 
   const handleUpdateCartQuantity = async (
     cartItemId: number,
-    newQuantity: number
+    newQuantity: number,
   ) => {
     if (updateCartMutation.status === "pending") return;
     if (newQuantity < 1) {
@@ -1124,7 +1130,7 @@ const ProductPage: React.FC<TProductDetails> = ({ productDetails }) => {
   return (
     <div className="bg-brand-bg min-h-screen font-sans">
       <Nav showCartIcon />
-      <main className="container mx-auto px-2 sm:px-4 py-8 md:py-12 flex flex-col-reverse lg:grid lg:grid-cols-2 gap-8 md:gap-12">
+      <main className="container mx-auto px-2 sm:px-4 pt-16 sm:pt-20 md:pt-24 py-8 md:py-12 flex flex-col-reverse lg:grid lg:grid-cols-2 gap-8 md:gap-12">
         <div className="lg:pr-8 flex flex-col">
           {/* <span className="inline-block self-start bg-brand-offer-btn text-white text-sm font-medium px-4 py-1 rounded-full mb-3">
  {product.Category?.name || "Coffee"}
@@ -1194,7 +1200,7 @@ const ProductPage: React.FC<TProductDetails> = ({ productDetails }) => {
                       onClick={() =>
                         handleUpdateCartQuantity(
                           currentItemInCart.cartItemId,
-                          currentItemInCart.quantity - 1
+                          currentItemInCart.quantity - 1,
                         )
                       }
                       className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1213,7 +1219,7 @@ const ProductPage: React.FC<TProductDetails> = ({ productDetails }) => {
                       onClick={() =>
                         handleUpdateCartQuantity(
                           currentItemInCart.cartItemId,
-                          currentItemInCart.quantity + 1
+                          currentItemInCart.quantity + 1,
                         )
                       }
                       className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1232,7 +1238,7 @@ const ProductPage: React.FC<TProductDetails> = ({ productDetails }) => {
                         ₹
                         {(
                           parseFloat(
-                            currentItemInCart.price?.toString() || "0"
+                            currentItemInCart.price?.toString() || "0",
                           ) * currentItemInCart.quantity
                         ).toFixed(2)}
                       </span>

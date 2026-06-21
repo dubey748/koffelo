@@ -28,7 +28,9 @@ export default function FeaturedSections() {
   }, []);
 
   const useFallback = products.length === 0;
-  const list = useFallback ? FALLBACK_CATALOGUE.slice(0, 6) : products.slice(0, 6);
+  const list = useFallback
+    ? FALLBACK_CATALOGUE.slice(0, 6)
+    : products.slice(0, 6);
 
   const trackClick = (product: any, targetId: number | string) => {
     try {
@@ -37,7 +39,7 @@ export default function FeaturedSections() {
           content_ids: [String(targetId)],
           contents: [
             {
-              id: targetId,
+              id: Number(targetId),
               quantity: 1,
               item_price: product?.variants?.[0]?.discountedPrice,
             },
@@ -100,8 +102,8 @@ export default function FeaturedSections() {
           </div>
           <div className="lg:col-span-5">
             <p className="text-k-ink-muted leading-relaxed mb-4 sm:mb-5 max-w-md">
-              Six expressions of the same idea — coffee with personality, dressed
-              for any moment. Choose your character below.
+              Six expressions of the same idea — coffee with personality,
+              dressed for any moment. Choose your character below.
             </p>
             <Link
               href="/#collection"
@@ -139,14 +141,8 @@ export default function FeaturedSections() {
                 ? productVariant?.discountedPrice || productVariant?.price
                 : item.discountedPrice;
               const originalPrice = isApi ? productVariant?.price : item.price;
-              const tag = isApi
-                ? idx === 0
-                  ? "Best Seller"
-                  : null
-                : item.tag;
-              const subtitle = isApi
-                ? item.description
-                : item.shortDescription;
+              const tag = isApi ? (idx === 0 ? "Best Seller" : null) : item.tag;
+              const subtitle = isApi ? item.description : item.shortDescription;
 
               if (!productId) return null;
 
