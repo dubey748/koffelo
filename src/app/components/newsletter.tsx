@@ -4,144 +4,132 @@ import { useState } from "react";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
-  const [pref, setPref] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Please enter a valid email address");
+      setError("A valid email, please.");
       return;
     }
     setError("");
     setSubmitted(true);
   };
 
-  const prefs = ["Black", "With Milk", "Iced", "Surprise me"];
-
   return (
     <section
       data-testid="newsletter-section"
-      className="bg-k-espresso text-k-paper section-padding relative overflow-hidden"
+      className="bg-k-black text-k-ivory section-padding relative overflow-hidden"
     >
-      <div className="absolute inset-0 grain-overlay opacity-30 pointer-events-none" />
-
-      {/* Decorative giant background text */}
+      {/* Decor */}
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 font-display text-[14rem] md:text-[20rem] leading-none uppercase text-k-paper/[0.025] whitespace-nowrap select-none pointer-events-none text-center"
-      >
-        Get 50% off
-      </div>
+        className="absolute -top-32 left-1/2 -translate-x-1/2 w-[44rem] h-[44rem] rounded-full bg-k-copper/15 blur-[120px] pointer-events-none"
+      />
+      <div className="absolute inset-0 grain-overlay opacity-30 pointer-events-none mix-blend-overlay" />
 
       <div className="container-koffee relative">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="eyebrow text-k-amber mb-6">— Get exclusive access</div>
-          <h2
-            data-testid="newsletter-heading"
-            className="font-display text-[clamp(2.25rem,6vw,5.5rem)] leading-[0.92] uppercase tracking-tightest mb-7 text-balance"
-          >
-            Get it{" "}
-            <em className="italic font-normal text-k-gold lowercase">
-              before
-            </em>{" "}
-            anyone else.
-          </h2>
-          <p className="text-k-cream-50/80 md:text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-            New blends, brewing rituals, and quiet little discounts.
-            50% off your first order — just for joining.
-          </p>
-
-          {submitted ? (
-            <div
-              data-testid="newsletter-success"
-              className="inline-flex flex-col items-center gap-3 p-7 rounded-3xl bg-k-paper/5 border border-k-paper/15 backdrop-blur-sm max-w-lg mx-auto"
-            >
-              <div className="w-14 h-14 rounded-full bg-k-gold/20 flex items-center justify-center">
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#E0B768"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
-              <div className="font-display text-2xl uppercase tracking-tight">
-                You&apos;re in.
-              </div>
-              <p className="text-k-cream-50/70 text-sm">
-                Check your inbox — your code is waiting.
-              </p>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left */}
+          <div className="lg:col-span-7">
+            <div className="flex items-center gap-4 mb-7">
+              <span className="block w-10 h-px bg-k-copper-light" />
+              <span className="text-[10px] tracking-[0.4em] uppercase text-k-copper-light">
+                Chapter IX · The Atelier
+              </span>
             </div>
-          ) : (
-            <form
-              data-testid="newsletter-form"
-              onSubmit={handleSubmit}
-              noValidate
-              className="max-w-xl mx-auto"
+            <h2
+              data-testid="newsletter-heading"
+              className="font-display text-[clamp(2.5rem,7vw,7rem)] leading-[0.88] tracking-tightest text-k-ivory mb-7 text-balance"
             >
-              <div className="mb-6">
-                <div className="text-[11px] tracking-[0.22em] uppercase text-k-amber/80 mb-4">
-                  How do you take your coffee?
-                </div>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {prefs.map((p) => (
-                    <button
-                      key={p}
-                      type="button"
-                      data-testid={`pref-${p.toLowerCase().replace(/\s/g, "-")}`}
-                      onClick={() => setPref(p)}
-                      className={`px-5 py-2.5 rounded-full text-sm tracking-wide border transition-all duration-400 ease-out-expo ${
-                        pref === p
-                          ? "bg-k-gold text-k-espresso border-k-gold"
-                          : "bg-transparent text-k-paper/80 border-k-paper/20 hover:border-k-paper/50 hover:text-k-paper"
-                      }`}
-                    >
-                      {p}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              Become an{" "}
+              <span className="italic text-k-copper-light">insider.</span>
+            </h2>
+            <p className="text-k-ink-light-muted text-lg md:text-xl leading-relaxed max-w-md mb-2">
+              New releases. Tasting notes. Members-only blends.
+              Quiet drops you won&apos;t see anywhere else.
+            </p>
+            <p className="text-[11px] tracking-[0.3em] uppercase text-k-copper-light">
+              No spam, ever. Unsubscribe in one tap.
+            </p>
+          </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
-                <input
-                  data-testid="newsletter-email-input"
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setError("");
-                  }}
-                  placeholder="your@email.com"
-                  className="flex-1 bg-k-paper/8 border border-k-paper/20 rounded-full px-6 py-4 text-k-paper placeholder:text-k-paper/40 outline-none focus:border-k-gold focus:bg-k-paper/12 transition-all duration-400 select-text-on"
-                />
-                <button
-                  type="submit"
-                  data-testid="newsletter-submit-btn"
-                  className="bg-k-gold text-k-espresso px-8 py-4 rounded-full text-sm tracking-[0.18em] uppercase font-medium hover:bg-k-gold-light transition-all duration-400 ease-out-expo hover-lift whitespace-nowrap"
+          {/* Right */}
+          <div className="lg:col-span-5">
+            <div className="relative bg-k-ivory/5 backdrop-blur-md border border-k-ivory/15 rounded-[2rem] p-8 md:p-10">
+              {/* corner decoration */}
+              <div className="absolute -top-3 -left-3 w-6 h-6 border-t border-l border-k-copper-light rounded-tl-xl" />
+              <div className="absolute -bottom-3 -right-3 w-6 h-6 border-b border-r border-k-copper-light rounded-br-xl" />
+
+              {submitted ? (
+                <div data-testid="newsletter-success" className="text-center py-4">
+                  <div className="w-14 h-14 mx-auto rounded-full bg-k-copper/20 flex items-center justify-center mb-4">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E0B868" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </div>
+                  <div className="font-display text-3xl italic text-k-ivory mb-3">
+                    You&apos;re in.
+                  </div>
+                  <p className="text-k-ink-light-muted text-sm">
+                    A welcome note is on its way to your inbox.
+                  </p>
+                </div>
+              ) : (
+                <form
+                  data-testid="newsletter-form"
+                  onSubmit={handleSubmit}
+                  noValidate
+                  className="space-y-5"
                 >
-                  Get 50% off →
-                </button>
-              </div>
-              {error && (
-                <p
-                  data-testid="newsletter-error"
-                  className="text-sm text-red-300 mt-3"
-                >
-                  {error}
-                </p>
+                  <div>
+                    <label className="block text-[10px] tracking-[0.4em] uppercase text-k-copper-light mb-3">
+                      Your email
+                    </label>
+                    <input
+                      data-testid="newsletter-email-input"
+                      type="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        setError("");
+                      }}
+                      placeholder="hello@yourdomain.com"
+                      className="w-full bg-transparent border-b border-k-ivory/30 pb-3 text-k-ivory placeholder:text-k-ivory/35 outline-none focus:border-k-copper-light transition-colors duration-300 text-lg select-text-on"
+                    />
+                  </div>
+
+                  {error && (
+                    <p
+                      data-testid="newsletter-error"
+                      className="text-sm text-k-copper-light italic"
+                    >
+                      {error}
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    data-testid="newsletter-submit-btn"
+                    className="group w-full inline-flex items-center justify-between bg-k-copper text-k-ivory rounded-full pl-6 pr-2 py-2 transition-all duration-500 ease-out-expo hover:bg-k-copper-light"
+                  >
+                    <span className="text-[12px] tracking-[0.3em] uppercase">
+                      Subscribe to the Atelier
+                    </span>
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-k-ivory text-k-copper transition-transform duration-500 group-hover:rotate-45">
+                      →
+                    </span>
+                  </button>
+
+                  <div className="pt-4 flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-k-ivory/45">
+                    <span className="w-6 h-px bg-k-ivory/30" />
+                    By joining, you accept our notes
+                  </div>
+                </form>
               )}
-              <p className="text-xs text-k-cream-50/40 mt-4">
-                No spam, ever. Unsubscribe anytime.
-              </p>
-            </form>
-          )}
+            </div>
+          </div>
         </div>
       </div>
     </section>

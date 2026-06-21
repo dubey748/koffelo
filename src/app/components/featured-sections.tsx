@@ -3,24 +3,32 @@
 import { ENDPOINT } from "@/endpoint";
 import { axiosInstance } from "@/utils/axiosInstance";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { TProductsTypes } from "./types";
 import { pushToDataLayer } from "@/utils/gtm";
 import { GTMTracker } from "@/utils/GTMEventManager";
 
+// Editorial fallback "menu" so the section never feels empty
+const fallback = [
+  { name: "The Signature", description: "Nitro cold brew · classic body", price: 899 },
+  { name: "Midnight Reserve", description: "Bold extract · deep roast", price: 1199 },
+  { name: "Morning Whisper", description: "Light bodied · floral notes", price: 749 },
+];
+
 export default function FeaturedSections() {
   const router = useRouter();
-  const [products, setProducts] = useState<TProductsTypes>([]);
+  const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hover, setHover] = useState<number | null>(null);
 
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const response = await axiosInstance.get(ENDPOINT.GET_PRODUCT_INFO);
-        const rawProducts = response.data?.data?.products || [];
-        setProducts(rawProducts);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
+        const r = await axiosInstance.get(ENDPOINT.GET_PRODUCT_INFO);
+        const raw = r.data?.data?.products || [];
+        setProducts(raw);
+      } catch {
+        // Silent — render fallback editorial menu
       } finally {
         setLoading(false);
       }
@@ -28,164 +36,163 @@ export default function FeaturedSections() {
     getProducts();
   }, []);
 
-  const handleGtmClick = (product: any, actualProductId: any) => {
-    const payload = {
-      content_ids: [String(actualProductId)],
-      contents: [
-        {
-          id: actualProductId,
-          quantity: 1,
-          item_price: product?.variants[0]?.discountedPrice,
-        },
-      ],
-      content_type: "product",
-      value: product.variants[0]?.discountedPrice,
-      currency: "INR",
-      num_items: 1,
-      page_url: window.location.pathname + " " + "ProductDetails",
-      page_title: document.title,
-    };
-    GTMTracker.trackViewContent(payload);
-  };
+  const list = products.length > 0 ? products.slice(0, 6) : fallback;
 
-  const goToProduct = (product: any, actualProductId: any) => {
-    handleGtmClick(product, actualProductId);
-    const contents = product.variants.map((item: any) => ({
-      id: item.productId,
-      quantity: 0,
-      item_price: item.price,
-    }));
-    pushToDataLayer({
-      event: "ViewContent",
-      content_ids: [actualProductId],
-      contents,
-      content_type: "product",
-      value: 0,
-      currency: "INR",
-      num_items: 0,
-      page_url: window.location.pathname + " " + "featured-sections",
-      page_title: document.title,
-    });
+  const goToProduct = (product: any) => {
+    const actualProductId = product?.variants?.[0]?.productId;
+    if (!actualProductId) return;
+    try {
+      GTMTracker.trackViewContent({
+        content_ids: [String(actualProductId)],
+        contents: [
+          {
+            id: actualProductId,
+            quantity: 1,
+            item_price: product?.variants?.[0]?.discountedPrice,
+          },
+        ],
+        content_type: "product",
+        value: product.variants[0]?.discountedPrice,
+        currency: "INR",
+        num_items: 1,
+        page_url: window.location.pathname,
+        page_title: document.title,
+      });
+      pushToDataLayer({
+        event: "ViewContent",
+        content_ids: [actualProductId],
+        contents: product.variants.map((it: any) => ({
+          id: it.productId,
+          quantity: 0,
+          item_price: it.price,
+        })),
+        content_type: "product",
+        value: 0,
+        currency: "INR",
+        num_items: 0,
+        page_url: window.location.pathname,
+        page_title: document.title,
+      });
+    } catch {}
     router.push(`/product/${actualProductId}`);
   };
 
   return (
     <section
-      data-testid="featured-products-section"
-      id="products"
-      className="bg-k-espresso text-k-paper section-padding relative overflow-hidden"
+      id="collection"
+      data-testid="collection-section"
+      className="relative bg-k-black text-k-ivory section-padding overflow-hidden"
     >
-      {/* Decorative giant text */}
+      {/* Decorative copper line */}
+      <div className="divider-gold absolute top-0 left-0 right-0" />
+
+      {/* Decorative italic word */}
       <div
         aria-hidden
-        className="absolute -bottom-10 left-0 right-0 font-display text-[20rem] leading-none uppercase text-k-paper/[0.03] whitespace-nowrap select-none overflow-hidden pointer-events-none"
+        className="absolute -bottom-16 left-0 right-0 font-display italic text-[clamp(12rem,28vw,32rem)] leading-none text-k-ivory/[0.025] select-none pointer-events-none whitespace-nowrap text-center"
       >
-        Koffelo Koffelo Koffelo
+        collection
       </div>
 
       <div className="container-koffee relative">
-        {/* Section header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 md:mb-16">
-          <div className="max-w-3xl">
-            <div className="eyebrow text-k-amber mb-5">— The Collection</div>
+        {/* Header */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 md:mb-20 items-end">
+          <div className="lg:col-span-7">
+            <div className="flex items-center gap-4 mb-6">
+              <span className="block w-10 h-px bg-k-copper" />
+              <span className="text-[10px] tracking-[0.4em] uppercase text-k-copper-light">
+                Chapter V · The Menu
+              </span>
+            </div>
             <h2
-              data-testid="featured-heading"
-              className="font-display text-[clamp(2.25rem,5.5vw,5rem)] leading-[0.92] uppercase tracking-tightest text-k-paper text-balance"
+              data-testid="collection-heading"
+              className="font-display text-[clamp(2.5rem,6.5vw,6rem)] leading-[0.9] tracking-tightest text-k-ivory text-balance"
             >
-              Coffee that works as hard{" "}
-              <em className="italic font-normal text-k-gold lowercase">as you do.</em>
+              A small collection,{" "}
+              <span className="italic text-k-copper-light">made well.</span>
             </h2>
           </div>
-          <button
-            data-testid="featured-shop-all"
-            onClick={() => router.push("/")}
-            className="hidden md:inline-flex items-center gap-3 text-k-amber text-sm tracking-[0.22em] uppercase link-underline shrink-0"
-          >
-            Shop the full range <span>→</span>
-          </button>
+          <div className="lg:col-span-5 lg:pl-6">
+            <p className="text-k-ink-light-muted leading-relaxed max-w-md mb-5">
+              Six expressions of the same idea — coffee with personality,
+              dressed for any moment. Choose your character below.
+            </p>
+            <button
+              onClick={() => router.push("/")}
+              data-testid="collection-view-all"
+              className="text-[11px] tracking-[0.3em] uppercase text-k-copper-light link-underline"
+              type="button"
+            >
+              View all expressions →
+            </button>
+          </div>
         </div>
 
-        {/* Products grid */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className="aspect-[4/5] rounded-3xl bg-k-paper/5 animate-pulse"
-              />
+              <div key={i} className="aspect-[4/5] rounded-3xl bg-k-ivory/5 animate-pulse" />
             ))}
           </div>
-        ) : products.length === 0 ? (
-          <div className="text-center py-16 text-k-paper/60">
-            No products available right now.
-          </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {products.slice(0, 6).map((product: any, idx: number) => {
+          <ul className="border-t border-k-ivory/15">
+            {list.map((product: any, idx: number) => {
               const actualProductId = product?.variants?.[0]?.productId;
               const productVariant = product?.variants?.[0];
-              const image = product.bannerUrl || "/assets/speciality.jpg";
+              const image = product.bannerUrl || "/assets/Banner.jpg";
+              const price = productVariant?.discountedPrice || productVariant?.price || product.price;
+              const isHover = hover === idx;
+              const isClickable = !!actualProductId;
 
               return (
-                <article
-                  key={actualProductId || idx}
-                  data-testid={`featured-product-card-${actualProductId}`}
-                  onClick={() => goToProduct(product, actualProductId)}
-                  className="group cursor-pointer flex flex-col"
+                <li
+                  key={(actualProductId || idx).toString()}
+                  data-testid={`collection-item-${idx}`}
+                  className="border-b border-k-ivory/15 group relative"
+                  onMouseEnter={() => setHover(idx)}
+                  onMouseLeave={() => setHover(null)}
+                  onClick={() => isClickable && goToProduct(product)}
+                  role={isClickable ? "button" : undefined}
+                  tabIndex={isClickable ? 0 : undefined}
+                  style={{ cursor: isClickable ? "pointer" : "default" }}
                 >
-                  <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-k-coffee img-hover-zoom mb-5">
-                    <img
-                      src={image}
-                      alt={product.name}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-k-espresso/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                    {/* Index number top-left */}
-                    <div className="absolute top-5 left-5 font-display text-3xl text-k-paper/90 leading-none">
-                      0{idx + 1}
+                  <div className="grid grid-cols-12 gap-6 py-7 md:py-9 items-center transition-all duration-500 ease-out-expo">
+                    <div className="col-span-2 md:col-span-1 text-[11px] tracking-[0.3em] text-k-copper-light italic">
+                      N°{String(idx + 1).padStart(2, "0")}
                     </div>
-
-                    {/* Gold dot */}
-                    <div className="absolute top-6 right-5 w-2 h-2 rounded-full bg-k-gold" />
-
-                    {/* Hover CTA bar */}
-                    <div className="absolute bottom-4 left-4 right-4 bg-k-paper text-k-espresso rounded-full px-5 py-3 flex items-center justify-between text-[11px] tracking-[0.2em] uppercase font-medium opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out-expo">
-                      <span>View product</span>
-                      <span>→</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="font-display text-2xl md:text-3xl uppercase tracking-tight text-k-paper leading-tight mb-1">
+                    <div className="col-span-7 md:col-span-7 lg:col-span-8">
+                      <h3 className={`font-display text-[clamp(1.5rem,3.5vw,3rem)] leading-tight transition-all duration-500 ${isHover ? "text-k-copper-light translate-x-3" : "text-k-ivory"}`}>
                         {product.name}
                       </h3>
-                      <p className="text-sm text-k-paper/55 line-clamp-1">
+                      <p className="text-sm md:text-base text-k-ink-light-muted mt-2 max-w-xl line-clamp-1">
                         {product.description}
                       </p>
                     </div>
-                    {productVariant?.price && (
-                      <div className="text-right shrink-0">
-                        <div className="font-display text-lg text-k-amber">
-                          ₹
-                          {productVariant?.discountedPrice ||
-                            productVariant?.price}
-                        </div>
-                        {productVariant?.discountedPrice &&
-                          productVariant?.price !==
-                            productVariant?.discountedPrice && (
-                            <div className="text-xs text-k-paper/40 line-through">
-                              ₹{productVariant?.price}
-                            </div>
-                          )}
+                    <div className="col-span-3 md:col-span-4 lg:col-span-3 text-right">
+                      <div className="font-display text-xl md:text-2xl text-k-ivory">
+                        {price ? `₹${price}` : "—"}
                       </div>
-                    )}
+                      {productVariant?.discountedPrice &&
+                        productVariant?.price !== productVariant?.discountedPrice && (
+                          <div className="text-xs text-k-ivory/40 line-through">
+                            ₹{productVariant?.price}
+                          </div>
+                        )}
+                    </div>
                   </div>
-                </article>
+
+                  {/* Hover preview image */}
+                  <div
+                    aria-hidden
+                    className={`pointer-events-none hidden lg:block absolute right-[20%] top-1/2 -translate-y-1/2 w-56 h-72 rounded-2xl overflow-hidden border border-k-ivory/15 shadow-premium transition-all duration-700 ease-out-expo z-20 ${isHover ? "opacity-100 scale-100 rotate-[-3deg]" : "opacity-0 scale-90 rotate-0"}`}
+                  >
+                    <img src={image} alt="" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-k-black/40 to-transparent" />
+                  </div>
+                </li>
               );
             })}
-          </div>
+          </ul>
         )}
       </div>
     </section>

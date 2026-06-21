@@ -75,30 +75,41 @@ const config: Config = {
           ring: "hsl(var(--sidebar-ring))",
         },
 
-        // ─── Koffelo Brand Palette (refined to match reference video) ───
-        // Backgrounds — warm cream/beige tones
-        "k-cream": "#F5EFE4",        // primary cream background (warm, soft)
-        "k-cream-50": "#FAF6EE",     // lightest cream (sections)
-        "k-cream-100": "#F2EADB",    // mid cream (alt sections)
-        "k-cream-200": "#E8DCC4",    // deeper cream / divider tone
-        "k-sand": "#E1CBA0",         // warm sand (nav, secondary surfaces)
+        // ─── Koffelo Atelier Palette — Editorial richness ───
+        // Deep coffee blacks (dominant dark surface)
+        "k-black": "#0E0805",        // near-black coffee
+        "k-espresso": "#1A0F08",     // primary dark surface
+        "k-coffee": "#2A1810",       // rich coffee
+        "k-mocha": "#3D2418",        // mocha
+        "k-walnut": "#5C3A21",       // walnut
+        "k-caramel": "#8A5A33",      // caramel
 
-        // Coffee browns — for text and primary surfaces
-        "k-espresso": "#2A1810",     // deepest, near-black brown (headlines, dark surfaces)
-        "k-coffee": "#3D2418",       // rich coffee brown (primary buttons, dark text)
-        "k-mocha": "#5C3A21",        // mocha brown
-        "k-walnut": "#7B4A2D",       // warm walnut
-        "k-caramel": "#A47148",      // soft caramel (subdued accents)
+        // Creams (light surfaces)
+        "k-ivory": "#F4ECD8",        // primary ivory — warmer than before
+        "k-paper": "#FAF4E4",        // lightest paper
+        "k-cream": "#EFE4CC",        // deeper cream
+        "k-cream-50": "#F7EFDB",     // mid cream
+        "k-cream-100": "#EAD9B8",    // sand cream
+        "k-cream-200": "#D9C39A",    // border / divider
+        "k-sand": "#C9B083",         // muted sand
+        // Aliases (back-compat)
 
-        // Gold/Amber accents
-        "k-gold": "#C8932D",         // primary gold (CTAs, accents)
-        "k-gold-light": "#D9A94A",   // hover/highlight gold
-        "k-amber": "#E0B768",        // muted amber
+        // Accents — copper & gold
+        "k-copper": "#B5651D",       // burnt copper (rich accent)
+        "k-copper-light": "#C97D33", // brighter copper
+        "k-gold": "#C8932D",         // burnished gold
+        "k-gold-light": "#E0B868",   // light gold
+        "k-amber": "#D9A03E",        // amber
+
+        // Optional accent — oxblood (for occasional richness)
+        "k-oxblood": "#5C1F1A",
+        "k-rust": "#8B3A1E",
 
         // Text helpers
-        "k-ink": "#1A0F08",          // primary text on light
+        "k-ink": "#0E0805",          // primary dark text on light
         "k-ink-muted": "#6B5444",    // muted body text on light
-        "k-paper": "#FBF7EF",        // off-white "paper"
+        "k-ink-light": "#F4ECD8",    // primary light text on dark
+        "k-ink-light-muted": "rgba(244, 236, 216, 0.65)", // muted light text
 
         // ─── Legacy brand-* aliases (preserved for existing components) ───
         "brand-bg": "#F5EFE4",

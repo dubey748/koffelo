@@ -1,104 +1,125 @@
 "use client";
 
-const steps = [
+const chapters = [
   {
-    n: "01",
-    title: "Fill your cup",
-    body: "Pour at least 5oz of water or milk. Hot or cold — Koffelo NOC works with both. The cartridge is designed for either.",
-    image: "/assets/up.jpg",
+    no: "II",
+    tag: "The Source",
+    title: "From one hand to another.",
+    body: "We work with smallholder growers across Karnataka, Kerala, and Tamil Nadu — names we know, harvests we visit. Every bean is hand-sorted before it ever sees fire.",
+    image: "/assets/handpicked.png",
+    accent: "Single-origin · Hand-sorted",
   },
   {
-    n: "02",
-    title: "Twist. Aim. Press.",
-    body: "Point the cartridge nozzle into your liquid and press. Nitrogen-infused cold brew sprays in, layered foam forms naturally.",
-    image: "/assets/hero1.jpg",
+    no: "III",
+    tag: "The Fire",
+    title: "Slow roasted. Small batches.",
+    body: "Each batch spends time in the drum — not on a schedule, but until the bean tells us it's ready. The result is a cup that tastes like intent.",
+    image: "/assets/superbold.png",
+    accent: "Small batch · 11 minute roast",
   },
   {
-    n: "03",
-    title: "Make it yours",
-    body: "Drink it straight, over ice, or topped with oat milk and a touch of sweetener. Your café, your way — no machine required.",
-    image: "/assets/philosophy.jpg",
+    no: "IV",
+    tag: "The Pour",
+    title: "Pressed in pure nitrogen.",
+    body: "Concentrate meets nitrogen meets cartridge — sealed at peak extraction. No oxidation, no compromise. Spray it, and the cascade tells the story.",
+    image: "/assets/beans.png",
+    accent: "N₂ infused · 10s cascade",
   },
 ];
 
-export default function HowItWorks() {
+export default function Chapters() {
   return (
     <section
-      id="how-it-works"
-      data-testid="how-it-works-section"
-      className="bg-k-cream-50 section-padding relative overflow-hidden"
+      id="ritual"
+      data-testid="chapters-section"
+      className="bg-k-ivory section-padding relative overflow-hidden"
     >
-      <div className="absolute inset-0 grain-overlay pointer-events-none opacity-50" />
+      {/* Decorative giant chapter number background */}
+      <div
+        aria-hidden
+        className="absolute -top-10 -right-20 font-display italic text-[28rem] leading-none text-k-copper/[0.05] select-none pointer-events-none"
+      >
+        ii
+      </div>
 
       <div className="container-koffee relative">
-        {/* Header */}
-        <div className="max-w-3xl mb-14 md:mb-20">
-          <div className="eyebrow mb-5">— From pocket to perfect</div>
-          <h2
-            data-testid="how-heading"
-            className="font-display text-[clamp(2.25rem,5.5vw,5rem)] leading-[0.95] uppercase tracking-tightest text-k-espresso text-balance"
-          >
-            Three steps.{" "}
-            <em className="italic font-normal text-k-gold lowercase">Ten</em>{" "}
-            seconds.{" "}
-            <br className="hidden md:block" />
-            Café quality.
+        {/* Section preface */}
+        <div className="max-w-3xl mb-20 md:mb-28">
+          <div className="flex items-center gap-4 mb-7">
+            <span className="block w-10 h-px bg-k-copper" />
+            <span className="text-[10px] tracking-[0.4em] uppercase text-k-copper">
+              Chapters II — IV · The Craft
+            </span>
+          </div>
+          <h2 className="font-display text-[clamp(2.5rem,6vw,5.5rem)] leading-[0.92] tracking-tightest text-k-espresso text-balance">
+            Coffee is a sequence{" "}
+            <span className="italic text-k-copper">of small decisions,</span>{" "}
+            made with care.
           </h2>
         </div>
 
-        {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
-          {steps.map((s, i) => (
-            <div
-              key={s.n}
-              data-testid={`how-step-${i}`}
-              className="group relative flex flex-col"
-            >
-              {/* Image */}
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden img-hover-zoom shadow-soft mb-6 bg-k-cream-100">
-                <img
-                  src={s.image}
-                  alt={s.title}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-k-espresso/40 via-transparent to-transparent" />
-                {/* Step number */}
-                <div className="absolute top-5 left-5 font-display text-5xl md:text-6xl text-k-paper leading-none">
-                  {s.n}
-                </div>
-                {/* Connecting line (desktop only) */}
-                {i < steps.length - 1 && (
-                  <div
-                    aria-hidden
-                    className="hidden md:block absolute top-1/2 -right-6 lg:-right-8 w-12 lg:w-16 h-px bg-k-walnut/30"
-                  >
-                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-k-gold" />
+        {/* Chapters — alternating asymmetric */}
+        <div className="space-y-24 md:space-y-32">
+          {chapters.map((c, i) => {
+            const reverse = i % 2 === 1;
+            return (
+              <article
+                key={c.no}
+                data-testid={`chapter-${i}`}
+                className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}
+              >
+                {/* Image */}
+                <div className="lg:col-span-6 relative">
+                  <div className={`relative ${reverse ? "lg:ml-auto" : ""} max-w-[560px]`}>
+                    {/* Frame */}
+                    <div className="absolute -inset-4 md:-inset-6 border border-k-copper/30 rounded-[2.5rem] pointer-events-none" />
+                    <div className="relative img-hover-zoom rounded-[2rem] overflow-hidden aspect-[4/5] bg-k-coffee shadow-medium">
+                      <img
+                        src={c.image}
+                        alt={c.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      {/* Vignette */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-k-black/35 to-transparent" />
+                      {/* Roman numeral overlay */}
+                      <div className={`absolute ${reverse ? "right-6" : "left-6"} top-5 font-display italic text-7xl md:text-8xl text-k-ivory/90 leading-none`}>
+                        {c.no}
+                      </div>
+                      {/* Accent ribbon */}
+                      <div className="absolute bottom-5 left-5 right-5 px-4 py-2.5 bg-k-black/50 backdrop-blur-md rounded-full border border-k-ivory/20 text-[10px] tracking-[0.3em] uppercase text-k-ivory text-center">
+                        {c.accent}
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
-
-              {/* Content */}
-              <div>
-                <div className="text-[11px] tracking-[0.22em] uppercase text-k-gold mb-3">
-                  Step {s.n}
                 </div>
-                <h3 className="font-display text-2xl md:text-3xl text-k-espresso mb-3 uppercase tracking-tight">
-                  {s.title}
-                </h3>
-                <p className="text-k-ink-muted leading-relaxed">{s.body}</p>
-              </div>
-            </div>
-          ))}
-        </div>
 
-        {/* Footer chip */}
-        <div className="mt-14 md:mt-16 flex flex-wrap items-center justify-center gap-3">
-          <div className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-k-paper border border-k-cream-200 shadow-soft">
-            <span className="w-2 h-2 rounded-full bg-k-gold animate-pulse" />
-            <span className="text-[12px] tracking-[0.22em] uppercase text-k-espresso">
-              Ready in 10 secs &nbsp;·&nbsp; Anywhere you go
-            </span>
-          </div>
+                {/* Text */}
+                <div className="lg:col-span-6">
+                  <div className={`max-w-xl ${reverse ? "" : "lg:pl-4"}`}>
+                    <div className="text-[10px] tracking-[0.4em] uppercase text-k-copper mb-5">
+                      Chapter {c.no} · {c.tag}
+                    </div>
+                    <h3 className="font-display text-[clamp(2rem,4.5vw,3.75rem)] leading-[0.95] text-k-espresso mb-7 text-balance">
+                      {c.title.split(" ").map((w, k) =>
+                        k === c.title.split(" ").length - 2 ? (
+                          <span key={k} className="italic text-k-copper">{w} </span>
+                        ) : (
+                          <span key={k}>{w} </span>
+                        )
+                      )}
+                    </h3>
+                    <p className="text-k-ink-muted text-lg leading-relaxed mb-8">
+                      {c.body}
+                    </p>
+                    <div className="flex items-center gap-3 text-[11px] tracking-[0.3em] uppercase text-k-walnut">
+                      <span className="block w-6 h-px bg-k-walnut" />
+                      Read on
+                    </div>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

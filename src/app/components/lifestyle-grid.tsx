@@ -1,96 +1,72 @@
 "use client";
 
-const scenarios = [
-  {
-    tag: "The Morning",
-    title: "Your daily latte. No line. No $7 price tag.",
-    body: "Spray Koffelo NOC into cold oat milk, add ice, and walk out the door with a better coffee than that drive-through.",
-    image: "/assets/up.jpg",
-    span: "md:col-span-2",
-  },
-  {
-    tag: "The Desk Drawer",
-    title: "The 2pm wall doesn't stand a chance.",
-    body: "Keep a pack in your drawer. Skip the vending-machine run.",
-    image: "/assets/philosophy.jpg",
-    span: "md:col-span-1",
-  },
-  {
-    tag: "The Gym Bag",
-    title: "Better than any energy drink in that cooler.",
-    body: "180mg, 0g sugar. Skip the supplement aisle entirely.",
-    image: "/assets/customer.jpg",
-    span: "md:col-span-1",
-  },
-  {
-    tag: "The Carry-On",
-    title: "Goes wherever your passport does.",
-    body: "Hotel room, red-eye, layover — no more bad airport coffee. TSA-approved and shelf-stable for 12+ months.",
-    image: "/assets/hero1.jpg",
-    span: "md:col-span-2",
-  },
-];
+import { useRouter } from "next/navigation";
 
-export default function LifestyleGrid() {
+export default function Manifesto() {
+  const router = useRouter();
+
   return (
     <section
-      data-testid="lifestyle-section"
-      className="bg-k-cream section-padding relative overflow-hidden"
+      data-testid="manifesto-section"
+      className="relative bg-k-copper text-k-ivory section-padding overflow-hidden"
     >
+      {/* Layered decorative shapes */}
+      <div
+        aria-hidden
+        className="absolute -top-32 -left-32 w-[36rem] h-[36rem] rounded-full border border-k-ivory/15 pointer-events-none"
+      />
+      <div
+        aria-hidden
+        className="absolute -top-20 -left-20 w-[32rem] h-[32rem] rounded-full border border-k-ivory/10 pointer-events-none"
+      />
+      <div
+        aria-hidden
+        className="absolute -bottom-40 -right-40 w-[44rem] h-[44rem] rounded-full bg-k-oxblood/30 blur-3xl pointer-events-none"
+      />
+      <div className="absolute inset-0 grain-overlay opacity-30 pointer-events-none mix-blend-overlay" />
+
       <div className="container-koffee relative">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 md:mb-16">
-          <div className="max-w-2xl">
-            <div className="eyebrow mb-5">— Built for every moment</div>
-            <h2
-              data-testid="lifestyle-heading"
-              className="font-display text-[clamp(2rem,5vw,4.5rem)] leading-[0.95] uppercase tracking-tightest text-k-espresso text-balance"
-            >
-              Your day never stops.{" "}
-              <em className="italic font-normal text-k-gold lowercase">
-                Neither does
-              </em>{" "}
-              Koffelo.
-            </h2>
+        <div className="max-w-5xl">
+          <div className="flex items-center gap-4 mb-10">
+            <span className="block w-10 h-px bg-k-ivory/70" />
+            <span className="text-[10px] tracking-[0.4em] uppercase text-k-ivory/85">
+              Chapter VI · The Manifesto
+            </span>
           </div>
-          <p className="text-k-ink-muted max-w-sm leading-relaxed">
-            Wherever your day takes you, Koffelo comes with — pocket, drawer,
-            bag, suitcase.
-          </p>
-        </div>
 
-        {/* Bento grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-          {scenarios.map((s, i) => (
-            <article
-              key={i}
-              data-testid={`lifestyle-card-${i}`}
-              className={`group relative overflow-hidden rounded-3xl bg-k-espresso ${s.span} aspect-[4/3] md:aspect-auto md:min-h-[420px] img-hover-zoom shadow-soft hover:shadow-premium transition-all duration-700 ease-out-expo`}
-            >
-              <img
-                src={s.image}
-                alt={s.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              {/* Heavy gradient for legibility */}
-              <div className="absolute inset-0 bg-gradient-to-t from-k-espresso via-k-espresso/55 to-k-espresso/10" />
+          <blockquote className="font-display text-[clamp(2.25rem,6vw,6rem)] leading-[1] text-k-ivory mb-12 text-balance tracking-tightest">
+            <span className="block">&ldquo;Coffee shouldn&apos;t be in a hurry.</span>
+            <span className="block italic">Neither should the people</span>
+            <span className="block">who choose it.&rdquo;</span>
+          </blockquote>
 
-              <div className="relative h-full flex flex-col justify-end p-7 md:p-9 lg:p-10 text-k-paper">
-                <div className="text-[11px] tracking-[0.22em] uppercase text-k-amber mb-4">
-                  {s.tag}
-                </div>
-                <h3 className="font-display text-2xl md:text-3xl lg:text-4xl leading-[1.05] uppercase tracking-tight mb-3 text-balance">
-                  {s.title}
-                </h3>
-                <p className="text-k-cream-50/85 max-w-md leading-relaxed text-sm md:text-base">
-                  {s.body}
-                </p>
-                <div className="mt-5 inline-flex items-center gap-2 text-[11px] tracking-[0.22em] uppercase text-k-amber opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-500 ease-out-expo">
-                  Explore
-                  <span>→</span>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
+            <div className="md:col-span-7">
+              <p className="text-lg md:text-xl text-k-ivory/85 leading-relaxed max-w-2xl">
+                We don&apos;t make the most coffee. We don&apos;t make the
+                cheapest. We make a cup that asks for two minutes of your
+                day — and gives you something worth those minutes back.
+              </p>
+            </div>
+            <div className="md:col-span-5 md:text-right">
+              <div className="text-[11px] tracking-[0.3em] uppercase text-k-ivory/70 mb-2">
+                Koffelo Atelier · Est. MMXX
               </div>
-            </article>
-          ))}
+              <button
+                onClick={() => router.push("/aboutus")}
+                data-testid="manifesto-cta"
+                className="group inline-flex items-center gap-3 text-k-ivory hover:text-k-cream-100 transition-colors duration-400"
+                type="button"
+              >
+                <span className="text-[12px] tracking-[0.3em] uppercase">
+                  Read the full story
+                </span>
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-k-ivory/40 transition-all duration-500 group-hover:border-k-ivory group-hover:bg-k-ivory group-hover:text-k-copper">
+                  →
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

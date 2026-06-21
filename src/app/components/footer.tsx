@@ -7,40 +7,54 @@ export default function Footer() {
     <footer
       id="contact"
       data-testid="site-footer"
-      className="bg-k-paper text-k-espresso relative overflow-hidden border-t border-k-cream-200"
+      className="relative bg-k-black text-k-ivory overflow-hidden border-t border-k-ivory/10"
     >
       <div className="container-koffee py-16 md:py-20">
-        {/* Top — giant wordmark */}
-        <div className="mb-12 md:mb-16">
+        {/* Top — pre-header line */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-12 md:mb-16">
+          <div className="flex items-center gap-4">
+            <span className="block w-10 h-px bg-k-copper" />
+            <span className="text-[10px] tracking-[0.4em] uppercase text-k-copper-light">
+              Colophon · Est. MMXX
+            </span>
+          </div>
+          <div className="text-[10px] tracking-[0.4em] uppercase text-k-ivory/40">
+            No. 042 · Final Page
+          </div>
+        </div>
+
+        {/* Giant signature */}
+        <div className="mb-16">
           <Link
             href="/"
-            className="font-display text-[clamp(4rem,12vw,11rem)] leading-[0.85] uppercase tracking-tightest text-k-espresso inline-block hover:text-k-coffee transition-colors duration-500"
+            className="font-display italic text-[clamp(4.5rem,15vw,14rem)] leading-[0.85] tracking-tightest text-k-ivory inline-block group"
           >
-            Koffelo<span className="text-k-gold">.</span>
+            Koffelo
+            <span className="text-k-copper-light not-italic">.</span>
           </Link>
-          <p className="font-display text-xl md:text-2xl text-k-ink-muted italic mt-4 max-w-xl">
-            United by coffee. Brewed with intention.
+          <p className="font-display text-xl md:text-2xl text-k-ink-light-muted italic mt-4 max-w-xl">
+            United by coffee, in pursuit of quiet excellence.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-10 mb-12 md:mb-16">
-          {/* Explore */}
+        {/* Columns */}
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-10 md:gap-12 mb-16">
           <div className="md:col-span-3">
-            <div className="text-[11px] tracking-[0.22em] uppercase text-k-gold mb-5">
-              Explore
+            <div className="text-[10px] tracking-[0.4em] uppercase text-k-copper-light mb-5">
+              The House
             </div>
             <ul className="space-y-3">
               {[
-                { label: "Shop", href: "/#products" },
-                { label: "How It Works", href: "/#how-it-works" },
-                { label: "About", href: "/aboutus" },
+                { label: "Shop", href: "/#collection" },
+                { label: "The Ritual", href: "/#ritual" },
+                { label: "Our Story", href: "/aboutus" },
                 { label: "Cart", href: "/cart" },
               ].map((l) => (
                 <li key={l.label}>
                   <Link
                     href={l.href}
                     data-testid={`footer-link-${l.label.toLowerCase().replace(/\s/g, "-")}`}
-                    className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
+                    className="text-k-ivory/80 hover:text-k-copper-light transition-colors duration-300 inline-block link-underline"
                   >
                     {l.label}
                   </Link>
@@ -49,17 +63,16 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Support */}
           <div className="md:col-span-3">
-            <div className="text-[11px] tracking-[0.22em] uppercase text-k-gold mb-5">
-              Support
+            <div className="text-[10px] tracking-[0.4em] uppercase text-k-copper-light mb-5">
+              The Quiet Print
             </div>
             <ul className="space-y-3">
               <li>
                 <Link
                   href="/aboutus#terms"
                   data-testid="footer-terms"
-                  className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
+                  className="text-k-ivory/80 hover:text-k-copper-light transition-colors duration-300 inline-block link-underline"
                 >
                   Terms &amp; Conditions
                 </Link>
@@ -67,7 +80,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/account"
-                  className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
+                  className="text-k-ivory/80 hover:text-k-copper-light transition-colors duration-300 inline-block link-underline"
                 >
                   My Account
                 </Link>
@@ -75,7 +88,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/orders"
-                  className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
+                  className="text-k-ivory/80 hover:text-k-copper-light transition-colors duration-300 inline-block link-underline"
                 >
                   My Orders
                 </Link>
@@ -83,16 +96,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
           <div className="md:col-span-3">
-            <div className="text-[11px] tracking-[0.22em] uppercase text-k-gold mb-5">
-              Contact
+            <div className="text-[10px] tracking-[0.4em] uppercase text-k-copper-light mb-5">
+              The Address
             </div>
-            <ul className="space-y-3 select-text-on">
+            <ul className="space-y-3 select-text-on text-sm">
               <li>
                 <a
                   href="mailto:info@morningbrew.com"
-                  className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
+                  className="text-k-ivory/80 hover:text-k-copper-light transition-colors duration-300 inline-block"
                 >
                   info@morningbrew.com
                 </a>
@@ -100,25 +112,24 @@ export default function Footer() {
               <li>
                 <a
                   href="tel:+919667946833"
-                  className="text-k-espresso/80 hover:text-k-gold transition-colors duration-300 inline-block"
+                  className="text-k-ivory/80 hover:text-k-copper-light transition-colors duration-300 inline-block"
                 >
                   +91 966-794-6833
                 </a>
               </li>
-              <li className="text-sm text-k-ink-muted leading-relaxed pt-2">
+              <li className="text-k-ink-light-muted leading-relaxed pt-2 border-t border-k-ivory/10">
                 Urbtech Trade Centre, IS 16, 1601
                 <br />
-                Sector 132, Noida 201301, U.P.
+                Sector 132, Noida 201301, India
               </li>
             </ul>
           </div>
 
-          {/* Follow */}
           <div className="md:col-span-3">
-            <div className="text-[11px] tracking-[0.22em] uppercase text-k-gold mb-5">
-              Follow
+            <div className="text-[10px] tracking-[0.4em] uppercase text-k-copper-light mb-5">
+              Elsewhere
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               {[
                 { href: "https://www.facebook.com/koffelo/", Icon: Facebook, label: "Facebook" },
                 { href: "https://www.instagram.com/koffelo_brew/", Icon: Instagram, label: "Instagram" },
@@ -132,24 +143,24 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   aria-label={label}
                   data-testid={`footer-social-${label.toLowerCase()}`}
-                  className="w-11 h-11 rounded-full border border-k-espresso/20 flex items-center justify-center text-k-espresso/70 hover:text-k-paper hover:bg-k-espresso hover:border-k-espresso transition-all duration-400 ease-out-expo"
+                  className="w-11 h-11 rounded-full border border-k-ivory/15 flex items-center justify-center text-k-ivory/70 hover:text-k-black hover:bg-k-copper-light hover:border-k-copper-light transition-all duration-400 ease-out-expo"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
-            <p className="text-xs text-k-ink-muted mt-6 leading-relaxed">
-              Tag us <span className="text-k-gold">@koffelo</span> — get featured.
+            <p className="text-xs text-k-ink-light-muted italic mt-5">
+              Tag <span className="text-k-copper-light">@koffelo</span> &mdash; quietly featured.
             </p>
           </div>
         </div>
 
-        <div className="border-t border-k-cream-200 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs tracking-wider text-k-ink-muted">
-            © {new Date().getFullYear()} Koffelo. All rights reserved.
+        <div className="border-t border-k-ivory/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs tracking-wider text-k-ivory/45">
+            © {new Date().getFullYear()} Koffelo Atelier. All rights reserved.
           </p>
-          <p className="text-[10px] tracking-[0.25em] uppercase text-k-ink-muted/70">
-            Crafted slowly. Shipped freshly.
+          <p className="text-[10px] tracking-[0.4em] uppercase text-k-ivory/40">
+            Brewed with intention.
           </p>
         </div>
       </div>

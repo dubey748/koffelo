@@ -4,28 +4,28 @@ import { useState } from "react";
 
 const faqs = [
   {
-    q: "What is Koffelo NOC?",
-    a: "Koffelo NOC is a pocket-sized, nitrogen-pressurized cold brew cartridge. Spray it into any liquid — water, milk, oat milk — and you have genuine nitro cold brew in under 10 seconds. No machine, no fridge, no wait.",
+    q: "What makes Koffelo different?",
+    a: "We aren't trying to make the most coffee in the country, just the most considered. Small-batch roasting, single-origin beans we know by name, and a nitrogen-cartridge format that meets you wherever your day takes you.",
   },
   {
-    q: "How do I use it?",
-    a: "Pour at least 5oz of your preferred base into a cup. Twist off the cap, aim the nozzle into the liquid, and press to spray. Add ice or sweetener to taste. Done.",
-  },
-  {
-    q: "What's actually inside?",
-    a: "A nitrogen-infused cold brew concentrate made from a premium Arabica blend. 180mg caffeine, 15 calories, 0g sugar. No preservatives. No artificial ingredients.",
-  },
-  {
-    q: "Why nitrogen?",
-    a: "Nitrogen preserves coffee at peak extraction — the same technology behind every nitro tap at your favorite coffee shop. It creates a naturally creamy texture and fine cascading bubbles. No oxidation, no stale flavor.",
+    q: "How do I use Koffelo NOC?",
+    a: "Pour 5oz of water, milk, or oat milk. Twist off the cap. Aim the nozzle into your cup and press. Real nitro cold brew, ready in seconds. Add ice or sweetener — your call.",
   },
   {
     q: "Do I need to refrigerate it?",
-    a: "No. Koffelo NOC is shelf-stable for 12+ months. Toss it in your bag, desk, suitcase — and forget about it until you need it.",
+    a: "Not at all. Each cartridge is shelf-stable for over twelve months. Toss it in your bag, your drawer, your carry-on. Wait until you want it.",
   },
   {
-    q: "How much caffeine in one cartridge?",
-    a: "180mg — roughly equivalent to a double shot of espresso. Zero sugar, just 15 calories.",
+    q: "Is the caffeine strong?",
+    a: "180mg per cartridge — about a double espresso. 0g sugar, 15 calories. Clean energy, no crash.",
+  },
+  {
+    q: "How is it shipped?",
+    a: "Within 48 hours of roasting, in fully recyclable packaging. India-wide delivery within 2–4 working days.",
+  },
+  {
+    q: "Do you offer subscriptions?",
+    a: "Yes — our Atelier members receive new releases first, plus 15% off every recurring order. Pause or cancel anytime.",
   },
 ];
 
@@ -35,39 +35,49 @@ export default function FAQ() {
   return (
     <section
       data-testid="faq-section"
-      className="bg-k-cream section-padding relative"
+      className="bg-k-cream-50 section-padding relative overflow-hidden"
     >
-      <div className="container-koffee">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-          {/* Header */}
-          <div className="lg:col-span-5">
+      <div
+        aria-hidden
+        className="absolute top-10 right-10 font-display italic text-[14rem] leading-none text-k-copper/[0.06] select-none pointer-events-none"
+      >
+        ?
+      </div>
+
+      <div className="container-koffee relative">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+          <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-28">
-              <div className="eyebrow mb-5">— Got questions?</div>
+              <div className="flex items-center gap-4 mb-7">
+                <span className="block w-10 h-px bg-k-copper" />
+                <span className="text-[10px] tracking-[0.4em] uppercase text-k-copper">
+                  Chapter VIII · The Notes
+                </span>
+              </div>
               <h2
                 data-testid="faq-heading"
-                className="font-display text-[clamp(2.25rem,5vw,4.5rem)] leading-[0.95] uppercase tracking-tightest text-k-espresso mb-7 text-balance"
+                className="font-display text-[clamp(2.25rem,5vw,4.25rem)] leading-[0.95] tracking-tightest text-k-espresso mb-7 text-balance"
               >
-                Everything you{" "}
-                <em className="italic font-normal text-k-gold lowercase">
-                  need
-                </em>{" "}
-                to know.
+                Small print,{" "}
+                <span className="italic text-k-copper">in plain words.</span>
               </h2>
-              <p className="text-k-ink-muted leading-relaxed mb-7 max-w-md">
-                Still curious? We&apos;re happy to chat about beans, brewing,
-                or anything in between.
+              <p className="text-k-ink-muted leading-relaxed mb-7 max-w-sm">
+                The things people most often ask before their first cup.
               </p>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 text-sm tracking-[0.22em] uppercase text-k-espresso link-underline"
+                data-testid="faq-contact-link"
+                className="inline-flex items-center gap-3 text-[11px] tracking-[0.3em] uppercase text-k-espresso group"
               >
-                Contact us <span>→</span>
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-k-espresso/30 transition-all duration-400 group-hover:bg-k-espresso group-hover:text-k-ivory">
+                  →
+                </span>
+                Write to us
               </a>
             </div>
           </div>
 
-          {/* Accordion */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-8">
             <div className="border-t border-k-espresso/15">
               {faqs.map((f, i) => {
                 const isOpen = open === i;
@@ -82,40 +92,39 @@ export default function FAQ() {
                       data-testid={`faq-toggle-${i}`}
                       className="w-full flex items-start justify-between gap-6 py-6 md:py-7 text-left group"
                       aria-expanded={isOpen}
+                      type="button"
                     >
-                      <span className="font-display text-lg md:text-2xl text-k-espresso uppercase tracking-tight leading-snug group-hover:text-k-coffee transition-colors duration-300">
-                        {f.q}
-                      </span>
+                      <div className="flex items-baseline gap-6 md:gap-8 min-w-0">
+                        <span className="text-[11px] tracking-[0.3em] text-k-copper italic shrink-0">
+                          N°{String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="font-display text-xl md:text-2xl text-k-espresso leading-snug">
+                          {f.q}
+                        </span>
+                      </div>
                       <span
-                        className={`shrink-0 mt-1 w-9 h-9 rounded-full border border-k-espresso/30 flex items-center justify-center transition-all duration-500 ease-out-expo ${
-                          isOpen
-                            ? "bg-k-espresso text-k-paper rotate-45 border-k-espresso"
-                            : "text-k-espresso group-hover:bg-k-espresso/5"
-                        }`}
+                        className={`shrink-0 mt-1 w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-500 ease-out-expo ${isOpen ? "bg-k-espresso text-k-ivory border-k-espresso rotate-90" : "border-k-espresso/30 text-k-espresso group-hover:bg-k-espresso/5"}`}
                       >
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                          {isOpen ? (
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          ) : (
+                            <>
+                              <line x1="12" y1="5" x2="12" y2="19" />
+                              <line x1="5" y1="12" x2="19" y2="12" />
+                            </>
+                          )}
                         </svg>
                       </span>
                     </button>
                     <div
-                      className={`overflow-hidden transition-all duration-500 ease-out-expo ${
-                        isOpen ? "max-h-96 pb-6 md:pb-7" : "max-h-0"
-                      }`}
+                      className={`overflow-hidden transition-all duration-500 ease-out-expo ${isOpen ? "max-h-96 pb-7 md:pb-8" : "max-h-0"}`}
                     >
-                      <p className="text-k-ink-muted leading-relaxed pr-12 md:text-lg">
-                        {f.a}
-                      </p>
+                      <div className="pl-0 md:pl-[5.5rem]">
+                        <p className="text-k-ink-muted leading-relaxed md:text-lg max-w-2xl">
+                          {f.a}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 );
